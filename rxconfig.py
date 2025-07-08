@@ -8,7 +8,6 @@ load_dotenv()
 api_key = os.getenv("api_key")
 api_url = os.getenv("api_url")
 jwt_secret = os.getenv("jwt_secret")
-# service_role = os.getenv("service_role") Only for admin use.
 
 config = rx.Config(
     app_name="wickpress",
@@ -22,5 +21,7 @@ config = rx.Config(
         "jwt_secret": jwt_secret,
         "let_jwt_expire": False, # (Optional: Default is False) Specify if tokens auto refresh. Can set to True for tighter/manual control of token refresh
         "cookie_max_age": 3600, # (Optional: Default = None) Seconds until cookie expires, otherwise is a session cookie.
-    } 
+    },
+    show_built_with_reflex=False,
+    telemetry_enabled=False
 )
