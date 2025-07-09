@@ -1,3 +1,4 @@
 from .buttons import *
 from .flex import *
-from .navbar import *
+from .navbars import *
+from .text import *
