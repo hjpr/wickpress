@@ -5,10 +5,10 @@ from ..states.auth import AuthState
 from ..components.navbars import navbar_back
 
 @rx.page(
-    route="/sign-in",
-    title="Sign In - Wick Press"
+    route="/sign-up",
+    title="Sign Up - Wick Press"
 )
-def signin() -> rx.Component:
+def signup() -> rx.Component:
     return rx.flex(
         navbar_back(),
             rx.flex(
@@ -22,7 +22,7 @@ def signin() -> rx.Component:
                     width="100%",
                 ),
                 rx.flex(
-                    rx.heading("Sign in to Wick Press", size="7"),
+                    rx.heading("Create your account", size="7"),
                     justify="center",
                     padding="0 0 2rem 0",
                 ),
@@ -43,13 +43,13 @@ def signin() -> rx.Component:
                         type="password",
                         required=True
                     ),
-                    rx.flex(
-                        rx.link(
-                            "Forgot password?",
-                            href="/reset-password"
-                        ),
-                        justify="center",
-                        width="100%",
+                    rx.input(
+                        height="3rem",
+                        name="reenter_password",
+                        placeholder="Re-Enter Password",
+                        size="3",
+                        type="password",
+                        required=True
                     ),
                     rx.button(
                         "Continue",
@@ -66,21 +66,8 @@ def signin() -> rx.Component:
                     width="100%",
                     on_submit=[
                         AuthState.setvar("is_loading", True),
-                        AuthState.sign_in
+                        AuthState.create_account
                     ]
-                ),
-                rx.flex(
-                    rx.text(
-                        "Are you new here? ",
-                        rx.link(
-                            "Sign up",
-                            href="/sign-up",
-                            class_name="text-rose-500 hover:text-rose-600"
-                        )
-                    ),
-                    justify="center",
-                    padding="1.5rem 0 1.5rem 0",
-                    width="100%",
                 ),
                 flex_direction="column",
                 width="26rem"

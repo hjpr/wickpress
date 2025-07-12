@@ -4,7 +4,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
 api_key = os.getenv("api_key")
 api_url = os.getenv("api_url")
 jwt_secret = os.getenv("jwt_secret")

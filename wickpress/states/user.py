@@ -1,8 +1,5 @@
 
-from .base import BaseState
-from loguru import logger
+from .auth import AuthState
 
-class UserState(BaseState):
-    
-    def sign_in(self, form_data: dict) -> None:
-        logger.info(f"UserState: sign_in called with form_data: {form_data}")
+class UserState(AuthState):
+    pass

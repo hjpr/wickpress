@@ -27,9 +27,15 @@ def index() -> rx.Component:
 
 def hero() -> rx.Component:
     return rx.flex(
-        rx.text(
-            "Short stories and tall tales.",
-            class_name="text-4xl text-center"
+        rx.color_mode_cond(
+            rx.text(
+                "Short stories and tall tales.",
+                class_name="text-4xl text-center"
+            ),
+            rx.text(
+                "Spooky stories and tall tales.",
+                class_name="text-4xl text-center"
+            ), 
         ),
         align="center",
         background_color="var(--gray-1)",
