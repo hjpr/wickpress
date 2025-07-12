@@ -6,7 +6,7 @@ from .pages import *
 from .states import *
 
 style = {
-    "font_family": "monospace",
+    "font_family": "monospace"
 }
 
 app = rx.App(
@@ -14,5 +14,12 @@ app = rx.App(
     theme=rx.theme(
         accent_color="ruby",
         radius="large"
+    ),
+    toaster=rx.toast.provider(
+        close_button=True,
+        position="top-center",
+        toast_options=rx.toast.options(
+            duration=3000
+        )
     )
 )

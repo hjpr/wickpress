@@ -5,10 +5,10 @@ from ..states.auth import AuthState
 from ..components.navbars import navbar_back
 
 @rx.page(
-    route="/sign-up",
-    title="Sign Up - Wick Press"
+    route="/forgot-password",
+    title="Forgot Password - Wick Press"
 )
-def signup() -> rx.Component:
+def forgot_password() -> rx.Component:
     return rx.flex(
         navbar_back(),
         rx.flex(
@@ -23,12 +23,18 @@ def signup() -> rx.Component:
             ),
             rx.flex(
                 rx.heading(
-                    "Create your account",
+                    "Forgot your password?",
                     size="6",
                     text_align="center"
                 ),
-                justify="center",
-                padding="0 0 2rem 0",
+                justify="center"
+            ),
+            rx.flex(
+                rx.text(
+                    "We'll send a one-time use link that will log you in. You'll be able to change your password within your account settings.",
+                    size="2",
+                ),
+                padding="1.5rem 0 1.5rem 0",
             ),
             rx.form(
                 rx.input(
@@ -39,28 +45,8 @@ def signup() -> rx.Component:
                     type="email",
                     required=True
                 ),
-                rx.input(
-                    height="2.75rem",
-                    name="password",
-                    placeholder="Password",
-                    size="3",
-                    type="password",
-                    required=True
-                ),
-                rx.input(
-                    height="2.75rem",
-                    name="reenter_password",
-                    placeholder="Re-Enter Password",
-                    size="3",
-                    type="password",
-                    required=True
-                ),
-                rx.text(
-                    "Passwords must match and be at least 8 characters long.",
-                    size="2"
-                ),
                 rx.button(
-                    "Continue",
+                    "Send link",
                     cursor="pointer",
                     loading=AuthState.is_loading,
                     type_="submit",
@@ -68,13 +54,13 @@ def signup() -> rx.Component:
                     class_name="inset-shadow-sm"
                 ),
                 display="flex",
-                gap="1.5rem",
                 flex_direction="column",
+                gap="1.5rem",
                 justify="center",
                 width="100%",
                 on_submit=[
                     AuthState.setvar("is_loading", True),
-                    AuthState.create_account
+                    AuthState.forgot_password
                 ]
             ),
             flex_direction="column",

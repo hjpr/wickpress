@@ -18,7 +18,10 @@ def navbar() -> rx.Component:
                             "Start publishing",
                         ),
                         cursor="pointer",
-                        size="2",
+                        size=rx.breakpoints(
+                            initial="2",
+                            md="3",
+                        ),
                     ),
                     rx.button(
                         rx.text(
@@ -26,7 +29,10 @@ def navbar() -> rx.Component:
                             on_click=rx.redirect("/sign-in")
                         ),
                         cursor="pointer",
-                        size="2",
+                        size=rx.breakpoints(
+                            initial="2",
+                            md="3",
+                        ),
                         variant="soft",
                     ),
                     rx.button(
@@ -35,7 +41,10 @@ def navbar() -> rx.Component:
                             rx.icon("sun", size=18),
                         ),
                         cursor="pointer",
-                        size="2",
+                        size=rx.breakpoints(
+                            initial="2",
+                            md="3",
+                        ),
                         variant="soft",
                         on_click=toggle_color_mode
                     ),
@@ -69,6 +78,17 @@ def navbar_back() -> rx.Component:
                 size="3",
                 variant="soft",
                 on_click=rx.call_script("history.back()")
+            ),
+            rx.spacer(),
+            rx.button(
+                rx.color_mode_cond(
+                    rx.icon("moon", size=18),
+                    rx.icon("sun", size=18),
+                ),
+                cursor="pointer",
+                size="3",
+                variant="soft",
+                on_click=toggle_color_mode
             ),
             width="100%",
         ),
