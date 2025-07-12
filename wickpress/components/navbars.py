@@ -1,27 +1,33 @@
 import reflex as rx
 
 from reflex.style import toggle_color_mode
+from ..states.base import BaseState
 
 def navbar() -> rx.Component:
     return rx.flex(
         rx.flex(
             rx.flex(
-                rx.text(
+                rx.link(
                     "Wick Press",
+                    href="/home",
                     display=["none", "none", "inline", "inline", "inline"],
                     font_size="1.5rem"
                 ),
                 rx.spacer(),
                 rx.flex(
-                    rx.button(
-                        rx.text(
-                            "Start publishing",
-                        ),
-                        cursor="pointer",
-                        size=rx.breakpoints(
-                            initial="2",
-                            md="3",
-                        ),
+                    # Show publish button only when at the about page.
+                    rx.cond(
+                        BaseState.current_page == "/about",
+                        rx.button(
+                            rx.text(
+                                "Start publishing",
+                            ),
+                            cursor="pointer",
+                            size=rx.breakpoints(
+                                initial="2",
+                                md="3",
+                            )
+                        )
                     ),
                     rx.button(
                         rx.text(

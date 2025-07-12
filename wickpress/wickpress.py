@@ -6,7 +6,10 @@ from .pages import *
 from .states import *
 
 style = {
-    "font_family": "monospace"
+    "font_family": "monospace",
+    rx.separator: {
+        "background_color": "var(--gray-4)",
+    }
 }
 
 app = rx.App(
