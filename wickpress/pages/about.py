@@ -19,10 +19,12 @@ def about() -> rx.Component:
             s3(),
             rx.separator(),
             flex_direction="column",
-            padding="4rem 0 0 0",
             width="100%",
         ),
-        class_name="flex-col w-full h-screen"
+        background_color="var(--gray-1)",
+        flex_direction="column",
+        flex_grow="1",
+        min_height="100vh",
     )
 
 def hero() -> rx.Component:

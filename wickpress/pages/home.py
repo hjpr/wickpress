@@ -1,7 +1,7 @@
 
 import reflex as rx
 
-from ..components import navbar
+from ..components import navbar, navbar_side
 from ..states.base import BaseState
 
 @rx.page(
@@ -10,17 +10,18 @@ from ..states.base import BaseState
 )
 def home() -> rx.Component:
     return rx.flex(
-        navbar(),
         rx.flex(
-            rx.button(
-                "Whats router data.",
-                on_click=BaseState.check_router_data,
-            )
+            navbar_side(),
+            display=["none", "none", "flex", "flex", "flex"],
         ),
-        align="center",
-        background_color="var(--gray-1)",
-        flex_direction="column",
+        rx.flex(
+            navbar(),
+            background_color="var(--gray-1)",
+            flex_direction="column",
+            flex_grow="1",
+            width="100%",
+        ),
+        flex_direction="row",
         min_height="100vh",
-        padding="4rem 2rem 2rem 2rem",
         width="100%",
     )
