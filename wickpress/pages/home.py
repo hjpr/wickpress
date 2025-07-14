@@ -33,7 +33,13 @@ def home() -> rx.Component:
                 ),
                 flex_direction="column",
                 align="center",
-                padding="5.5rem 1rem 1rem 1rem",
+                padding=rx.breakpoints(
+                    xs="5.5rem 0 0 0",  # When sidebar is hidden
+                    sm="5.5rem 0 0 4.5rem",
+                    md="5.5rem 0 0 4.5rem",
+                    lg="5.5rem 0 0 4.5rem",
+                    xl="5.5rem 0 0 4.5rem",
+                ),
                 width="100%",
             ),
             background_color="var(--gray-1)",

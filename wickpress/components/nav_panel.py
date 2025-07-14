@@ -32,10 +32,10 @@ def nav_panel(content: rx.Component, filters: list[str]) -> rx.Component:
                 flex_grow="1",
                 gap="1rem",
                 height="3rem",
-                padding="0 0 0 3.75rem",
+                padding="0 3.25rem",
                 align="center",
                 overflow_x="scroll",
-                scrollbar_width="none"
+                scrollbar_width="none",
             ),
             rx.flex(
                 rx.icon("chevron_right", color="var(--gray-10)"),
@@ -68,6 +68,7 @@ def nav_panel(content: rx.Component, filters: list[str]) -> rx.Component:
             max_width='36rem',
             width='100%',
         ),
+        bg="var(--gray-1)",
         flex_direction="column",
         flex_grow="1", 
         align="center", # Center content horizontally
@@ -84,7 +85,8 @@ def filter_element(filter: str) -> rx.Component:
     return rx.flex(
         rx.badge(
             filter,
-            size="2"
+            size="2",
+            user_select="none"
         ),
         cursor="pointer"
     )

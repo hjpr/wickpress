@@ -51,7 +51,6 @@ def discover() -> rx.Component:
                 align="center",
                 width="100%",
             ),
-            background_color="var(--gray-1)",
             flex_direction="row",
             flex_grow="1",
             width="100%",
@@ -63,11 +62,19 @@ def discover() -> rx.Component:
 
 def discover_content() -> rx.Component:
     return rx.flex(
-        rx.text("Discover content goes here."),
-        border="1px solid black",
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
         flex_direction="column",
         flex_grow="1",
-        padding="1rem",
+        class_name="divide-y divide-[var(--gray-3)]",
     )
 
 def mockup_element_post() -> rx.Component:

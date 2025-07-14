@@ -78,6 +78,13 @@ def library() -> rx.Component:
                 ),
                 flex_direction="column",
                 align="center",
+                padding=rx.breakpoints(
+                    xs="4.5rem 0 0 0",  # When sidebar is hidden
+                    sm="4.5rem 0 0 4.5rem",
+                    md="4.5rem 0 0 4.5rem",
+                    lg="4.5rem 0 0 4.5rem",
+                    xl="4.5rem 0 0 4.5rem",
+                ),
                 width="100%",
             ),
             background_color="var(--gray-1)",
@@ -93,10 +100,16 @@ def library() -> rx.Component:
 def new_releases_tab() -> rx.Component:
     return rx.flex(
         mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
         id="new_releases",
         flex_direction="column",
-        padding="4.5rem 0 0 0",
-        scroll_margin_top="4.5rem",
+        scroll_margin_top="10rem",
         width="100%",
         class_name="divide-y divide-[var(--gray-3)]",
     )
@@ -104,10 +117,16 @@ def new_releases_tab() -> rx.Component:
 def all_content_tab() -> rx.Component:
     return rx.flex(
         mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
         id="all_content",
         flex_direction="column",
-        padding="4.5rem 0 0 0",
-        scroll_margin_top="4.5rem",
+        scroll_margin_top="10rem",
         width="100%",
         class_name="divide-y divide-[var(--gray-3)]",
     )
@@ -115,10 +134,16 @@ def all_content_tab() -> rx.Component:
 def subscriptions_tab() -> rx.Component:
     return rx.flex(
         mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
         id="subscriptions",
         flex_direction="column",
-        padding="4.5rem 0 0 0",
-        scroll_margin_top="4.5rem",
+        scroll_margin_top="10rem",
         width="100%",
         class_name="divide-y divide-[var(--gray-3)]",
     )
