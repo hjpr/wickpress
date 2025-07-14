@@ -1,14 +1,14 @@
 
 import reflex as rx
 
-from ..components import navbar, navbar_side
-from ..states.base import BaseState
+from ...components import navbar, navbar_side
+from ...states.base import BaseState
 
 @rx.page(
-    route="/home",
-    title="Home - Wick Press"
+    route="/template",
+    title="Template - Wick Press"
 )
-def home() -> rx.Component:
+def double_nav_page() -> rx.Component:
     return rx.flex(
         rx.flex(
             navbar_side(),
@@ -18,13 +18,11 @@ def home() -> rx.Component:
             navbar(),
             # Content area for the main page
             rx.flex(
-                rx.card(
-                    height='100%',
-                    width='36rem',
+                rx.flex(
+                    max_width='36rem',
                 ),
                 height="100%",
                 justify="center",
-                padding="1rem",
                 width="100%",
             ),
             background_color="var(--gray-1)",

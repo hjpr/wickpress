@@ -8,10 +8,6 @@ console = Console()
 
 class BaseState(Suplex):
 
-    @rx.var
-    def current_page(self) -> str:
-        return self.router.url.path
-
     def check_router_data(self):
         """
         This method is a placeholder to demonstrate how to access router data.

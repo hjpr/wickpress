@@ -5,10 +5,10 @@ from ..components import navbar, navbar_side
 from ..states.base import BaseState
 
 @rx.page(
-    route="/home",
-    title="Home - Wick Press"
+    route="/subscriptions",
+    title="Subscriptions - Wick Press"
 )
-def home() -> rx.Component:
+def subscriptions() -> rx.Component:
     return rx.flex(
         rx.flex(
             navbar_side(),

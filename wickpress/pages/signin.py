@@ -90,7 +90,8 @@ def signin() -> rx.Component:
                 width="100%",
             ),
             flex_direction="column",
-            max_width="26rem"
+            max_width="26rem",
+            width="100%",
         ),
         align="center",
         background_color="var(--gray-1)",

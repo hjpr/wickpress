@@ -1,7 +1,10 @@
 import reflex as rx
 
+from ..components.menus import mobile_menu
+from ..components.modals import search_modal_for_navbar
 from reflex.style import toggle_color_mode
-from ..states.base import BaseState
+from ..states.page import PageState
+
 
 def navbar() -> rx.Component:
     return rx.flex(
@@ -9,34 +12,52 @@ def navbar() -> rx.Component:
         rx.flex(
             # Holds logo and buttons.
             rx.flex(
-                # Mobile dropdown for navigation.
-                rx.drawer.root(
-                    rx.drawer.trigger(
-                        rx.icon(
-                            "menu",
-                            size=24,
-                            cursor="pointer",
-                        ),
-                        display=["inline", "inline", "none", "none", "none"],
+                rx.flex(
+                    mobile_menu(),
+                ),
+                rx.flex(
+                    # Current page title.
+                    rx.cond(
+                        PageState.current_page != "/about",
+                        rx.heading(PageState.current_page_formatted)
                     ),
-                    rx.drawer.portal(
-                        rx.drawer.content(
-                            rx.flex(
-                                rx.drawer.close(rx.box(rx.button("Close"))),
+                ),
+
+                # Search input field only on the home page.
+                rx.cond(
+                    PageState.current_page != "/about",
+                    rx.flex(
+                        rx.form(
+                            rx.input(
+                                search_modal_for_navbar(),
+                                name="search_input",
+                                placeholder="Search...",
+                                display=["none", "none", "flex", "flex", "flex"],
+                                max_width="24rem",
+                                min_width="18rem",
+                                size=rx.breakpoints(
+                                    initial="2",
+                                    md="3",
+                                ),
+                                width="100%",
                             ),
-                            height="100%",
-                            width="20em",
-                            padding="2em",
-                            background_color="#FFF",
-                        )
-                    ),
-                    direction="left",
+                            display="flex",
+                            width="auto",
+                            reset_on_submit=True,
+                            on_submit=[
+                                PageState.setvar("is_loading", True),
+                                PageState.submit_search_from_navbar,
+                            ]
+                        ),
+                        justify="end",
+                        width="100%"
+                    )
                 ),
 
                 rx.flex(
                     # Show publish button only when at the about page.
                     rx.cond(
-                        BaseState.current_page == "/about",
+                        PageState.current_page == "/about",
                         rx.button(
                             rx.text(
                                 "Start writing",
@@ -48,32 +69,6 @@ def navbar() -> rx.Component:
                             )
                         )
                     ),
-
-                    # Search input field only on the home page.
-                    rx.cond(
-                        BaseState.current_page == "/home",
-                        rx.input(
-                            placeholder="Search...",
-                            width="100%",
-                            size=rx.breakpoints(
-                                initial="2",
-                                md="3",
-                            ),
-                            display=["none", "flex", "flex", "flex", "flex"],
-                        )
-                    ),
-                    # Search icon on mobile.
-                    rx.button(
-                        rx.icon(
-                            "Search",
-                            size=18
-                        ),
-                        cursor="pointer",
-                        display=["inline", "none", "none", "none", "none"],
-                        size=rx.breakpoints(initial="2", md="3"),
-                        variant="soft",
-                    ),
-
                     rx.button(
                         rx.text(
                             "Sign in",
@@ -99,11 +94,10 @@ def navbar() -> rx.Component:
                         variant="soft",
                         on_click=toggle_color_mode
                     ),
-                    align="center",
                     gap="0.75rem",
+                    width="auto"
                 ),
                 align="center",
-                justify_content=["space-between", "space-between", "end", "end", "end"],
                 gap="0.75rem",
                 width="100%"
             ),
@@ -191,6 +185,7 @@ def navbar_side() -> rx.Component:
                                 variant="ghost",
                                 height="100%",
                                 width="100%",
+                                on_click=rx.redirect("/home")
                             ),
                             side="right",
                             content="Home",
@@ -214,6 +209,7 @@ def navbar_side() -> rx.Component:
                                 variant="ghost",
                                 height="100%",
                                 width="100%",
+                                on_click=rx.redirect("/subscriptions")
                             ),
                             side="right",
                             content="Subscriptions",
@@ -237,6 +233,7 @@ def navbar_side() -> rx.Component:
                                 variant="ghost",
                                 height="100%",
                                 width="100%",
+                                on_click=rx.redirect("/messages")
                             ),
                             side="right",
                             content="Messages",
@@ -260,6 +257,7 @@ def navbar_side() -> rx.Component:
                                 variant="ghost",
                                 height="100%",
                                 width="100%",
+                                on_click=PageState.setvar("search_modal_open", ~PageState.search_modal_open)
                             ),
                             side="right",
                             content="Search",
