@@ -37,7 +37,7 @@ def search_modal_for_navbar() -> rx.Component:
                     ),
                     rx.flex(
                         rx.text_field(
-                            placeholder="Writers, series, posts, tags...",
+                            placeholder="Writers, series, episodes, tags...",
                             value=PageState.search_input,
                             bg="none",
                             border="none",

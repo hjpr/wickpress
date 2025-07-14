@@ -94,16 +94,16 @@ def navbar() -> rx.Component:
                         variant="soft",
                         on_click=toggle_color_mode
                     ),
+                    flex_shrink="0",
                     gap="0.75rem",
-                    width="auto"
                 ),
                 align="center",
+                justify="end",
                 gap="0.75rem",
                 width="100%"
             ),
             justify="center",
             flex_direction="column",
-            height="4rem",
             padding="1rem",
             width="100%",
         ),
@@ -193,12 +193,12 @@ def navbar_side() -> rx.Component:
                         height="2.75rem",
                         width="2rem"
                     ),
-                    # Subscriptions button
+                    # Library button
                     rx.flex(
                         rx.tooltip(
                             rx.button(
                                 rx.icon(
-                                    "book-open",
+                                    "library-big",
                                     color="var(--gray-10)",
                                 ),
                                 cursor="pointer",
@@ -209,10 +209,10 @@ def navbar_side() -> rx.Component:
                                 variant="ghost",
                                 height="100%",
                                 width="100%",
-                                on_click=rx.redirect("/subscriptions")
+                                on_click=rx.redirect("/library")
                             ),
                             side="right",
-                            content="Subscriptions",
+                            content="Library",
                         ),
                         height="2.75rem",
                         width="2rem"
