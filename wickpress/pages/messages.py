@@ -18,11 +18,13 @@ def messages() -> rx.Component:
             navbar(),
             # Content area for the main page
             rx.flex(
-                rx.flex(
-                    max_width='36rem',
+                rx.card(
+                    height='100%',
+                    width='36rem',
                 ),
                 height="100%",
                 justify="center",
+                padding="1rem",
                 width="100%",
             ),
             background_color="var(--gray-1)",

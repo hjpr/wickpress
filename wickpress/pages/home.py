@@ -10,29 +10,32 @@ from ..states.base import BaseState
 )
 def home() -> rx.Component:
     return rx.flex(
+        navbar(),
         rx.flex(
+
+            # Sidebar for navigation
             navbar_side(),
-            display=["none", "none", "flex", "flex", "flex"],
-        ),
-        rx.flex(
-            navbar(),
-            # Content area for the main page
+
+            # Main content area
             rx.flex(
-                rx.card(
-                    height='100%',
-                    width='36rem',
+                rx.flex(
+                    rx.callout("Fart"),
+                    flex_direction="column",
+                    max_width='36rem',
+                    width='100%',
                 ),
-                height="100%",
-                justify="center",
-                padding="1rem",
+                flex_direction="column",
+                align="center",
+                padding="5.5rem 1rem 1rem 1rem",
                 width="100%",
             ),
             background_color="var(--gray-1)",
-            flex_direction="column",
+            flex_direction="row",
             flex_grow="1",
             width="100%",
         ),
-        flex_direction="row",
-        min_height="100vh",
+        flex_direction="column",
+        scroll_padding_top="4.5rem",
+        height="100vh",
         width="100%",
     )

@@ -18,7 +18,7 @@ def subscriptions() -> rx.Component:
             navbar(),
             # Content area for the main page
             rx.flex(
-                rx.card(
+                rx.flex(
                     height='100%',
                     width='36rem',
                 ),

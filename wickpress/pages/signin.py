@@ -96,7 +96,7 @@ def signin() -> rx.Component:
         align="center",
         background_color="var(--gray-1)",
         flex_direction="column",
-        min_height="100vh",
-        padding="4rem 2rem 2rem 2rem",
+        height="100vh",
+        padding="1rem",
         width="100%",
     )

@@ -50,7 +50,7 @@ def search_modal_for_navbar() -> rx.Component:
                                 "outline": "none",
                                 "box_shadow": "none"
                             },
-                            on_change=PageState.setvar("search_input").debounce(600),
+                            on_change=PageState.setvar("search_input").debounce(500),
                         ),
                         align="center",
                         width="100%",
