@@ -11,92 +11,101 @@ from ..components.navbars import navbar_back
 def signin() -> rx.Component:
     return rx.flex(
         navbar_back(),
+
+        # Contains main content
         rx.flex(
+
+            # Contains the main content of the sign-in page.
             rx.flex(
-                rx.heading(
-                    "W",
-                    size="9",
-                ),
-                justify="center",
-                padding="0 0 2rem 0",
-                width="100%",
-            ),
-            rx.flex(
-                rx.heading(
-                    "Sign in to Wick Press",
-                    size="6",
-                    text_align="center"
-                ),
-                justify="center",
-                padding="0 0 2rem 0",
-            ),
-            rx.form(
-                rx.input(
-                    height="2.75rem",
-                    name="email",
-                    placeholder="Email",
-                    size="3",
-                    type="email",
-                    required=True
-                ),
-                rx.input(
-                    height="2.75rem",
-                    name="password",
-                    placeholder="Password",
-                    size="3",
-                    type="password",
-                    required=True
-                ),
                 rx.flex(
-                    rx.link(
-                        "Forgot Password?",
-                        href="/forgot-password",
-                        size="2",
+                    rx.heading(
+                        "W",
+                        size="9",
                     ),
                     justify="center",
-                    width="100%"
+                    padding="0 0 2rem 0",
+                    width="100%",
                 ),
-                rx.button(
-                    "Continue",
-                    cursor="pointer",
-                    loading=AuthState.is_loading,
-                    type_="submit",
-                    size="4",
-                    class_name="inset-shadow-sm"
-                ),
-                display="flex",
-                gap="1.5rem",
-                flex_direction="column",
-                justify="center",
-                width="100%",
-                on_submit=[
-                    AuthState.setvar("is_loading", True),
-                    AuthState.sign_in
-                ]
-            ),
-            rx.flex(
-                rx.text(
-                    "Are you new here? ",
-                    rx.link(
-                        "Sign up",
-                        href="/sign-up",
+                rx.flex(
+                    rx.heading(
+                        "Sign in to Wick Press",
+                        size="6",
+                        text_align="center"
                     ),
-                    size="2"
+                    justify="center",
+                    padding="0 0 2rem 0",
                 ),
-                align="center",
+                rx.form(
+                    rx.input(
+                        height="2.75rem",
+                        name="email",
+                        placeholder="Email",
+                        size="3",
+                        type="email",
+                        required=True
+                    ),
+                    rx.input(
+                        height="2.75rem",
+                        name="password",
+                        placeholder="Password",
+                        size="3",
+                        type="password",
+                        required=True
+                    ),
+                    rx.flex(
+                        rx.link(
+                            "Forgot Password?",
+                            href="/forgot-password",
+                            size="2",
+                        ),
+                        justify="center",
+                        width="100%"
+                    ),
+                    rx.button(
+                        "Continue",
+                        cursor="pointer",
+                        loading=AuthState.is_loading,
+                        type_="submit",
+                        size="4",
+                        class_name="inset-shadow-sm"
+                    ),
+                    display="flex",
+                    gap="1.5rem",
+                    flex_direction="column",
+                    justify="center",
+                    width="100%",
+                    on_submit=[
+                        AuthState.setvar("is_loading", True),
+                        AuthState.sign_in
+                    ]
+                ),
+                rx.flex(
+                    rx.text(
+                        "Are you new here? ",
+                        rx.link(
+                            "Sign up",
+                            href="/sign-up",
+                        ),
+                        size="2"
+                    ),
+                    align="center",
+                    flex_direction="column",
+                    gap="1rem",
+                    padding="1.5rem 0 1.5rem 0",
+                    width="100%",
+                ),
                 flex_direction="column",
-                gap="1rem",
-                padding="1.5rem 0 1.5rem 0",
-                width="100%",
+                flex_grow="1",
+                max_width="26rem",
+                padding="5rem 0 0 0",
             ),
-            flex_direction="column",
-            max_width="26rem",
-            width="100%",
+            bg="var(--gray-1)",
+            flex_direction="row",
+            justify="center",
+            flex_grow="1",
         ),
-        align="center",
-        background_color="var(--gray-1)",
         flex_direction="column",
+        scroll_padding_top="4.5rem",
         height="100vh",
-        padding="1rem",
         width="100%",
     )

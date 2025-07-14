@@ -20,8 +20,8 @@ def mobile_menu() -> rx.Component:
                 background_color="var(--gray-1)",
                 height="100%",
                 padding="2em",
-                top="4.25rem",
-                width="100%",
+                top="4.5rem",
+                width="100%"
             )
         ),
         direction="left",

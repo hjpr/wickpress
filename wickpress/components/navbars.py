@@ -117,8 +117,8 @@ def navbar() -> rx.Component:
             flex_direction="column",
             width="100%"
         ),
+        bg="var(--gray-1)",
         height="4.5rem",
-        backdrop_filter="blur(30px)",
         position="fixed",
         width="100%",
         z_index="100"
@@ -134,7 +134,6 @@ def navbar_back() -> rx.Component:
                 variant="soft",
                 on_click=rx.call_script("history.back()")
             ),
-            rx.spacer(),
             rx.button(
                 rx.color_mode_cond(
                     rx.icon("moon", size=18),
@@ -145,14 +144,16 @@ def navbar_back() -> rx.Component:
                 variant="soft",
                 on_click=toggle_color_mode
             ),
-            width="100%",
+            flex_grow="1",
+            justify_content="space-between",
         ),
-        background_color="var(--gray-1)",
-        flex_direction="column",
-        padding="0.75rem",
-        position="sticky",
-        top="0",
+        align="center",
+        bg="var(--gray-1)",
+        height="4.5rem",
+        position="fixed",
+        padding="0 1rem",
         width="100%",
+        z_index="100"
     )
 
 def navbar_side() -> rx.Component:

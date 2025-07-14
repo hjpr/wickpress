@@ -13,6 +13,7 @@ style = {
 
 app = rx.App(
     style=style,
+    stylesheets=["/styles.css"],
     theme=rx.theme(
         accent_color="ruby",
         radius="large"

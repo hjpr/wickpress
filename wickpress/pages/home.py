@@ -11,16 +11,23 @@ from ..states.base import BaseState
 def home() -> rx.Component:
     return rx.flex(
         navbar(),
+
+        # Contains side navigation and main content
         rx.flex(
 
             # Sidebar for navigation
             navbar_side(),
 
-            # Main content area
+            # Main content container
             rx.flex(
+
+                # Main content area, centered and width-limited
                 rx.flex(
-                    rx.callout("Fart"),
+                    rx.card(
+                        flex_grow="1",
+                    ),
                     flex_direction="column",
+                    flex_grow="1",
                     max_width='36rem',
                     width='100%',
                 ),

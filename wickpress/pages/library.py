@@ -10,14 +10,18 @@ from ..states.base import BaseState
 )
 def library() -> rx.Component:
     return rx.flex(
+        navbar(),
+
+        # Contains side navigation and main content
         rx.flex(
+
+            # Sidebar for navigation
             navbar_side(),
-            display=["none", "none", "flex", "flex", "flex"],
-        ),
-        rx.flex(
-            navbar(),
-            # Content area for the main page
+
+            # Main content container
             rx.flex(
+
+                # Main content area, centered and width-limited
                 rx.flex(
                     rx.tabs.root(
                         rx.tabs.list(
@@ -26,20 +30,27 @@ def library() -> rx.Component:
                                 value="new_releases",
                                 cursor="pointer",
                                 width="33%",
+                                on_click=rx.scroll_to(elem_id="new_releases")
                             ),
                             rx.tabs.trigger(
                                 "All Content",
                                 value="all_content",
                                 cursor="pointer",
                                 width="34%",
+                                on_click=rx.scroll_to(elem_id="all_content")
                             ),
                             rx.tabs.trigger(
                                 "Subscriptions",
                                 value="subscriptions",
                                 cursor="pointer",
                                 width="33%",
+                                on_click=rx.scroll_to(elem_id="subscriptions")
                             ),
+                            bg="var(--gray-1)",
+                            position="sticky",
+                            top="4.5rem",
                             width="100%",
+                            z_index="10",
                         ),
                         rx.tabs.content(
                             new_releases_tab(),
@@ -54,73 +65,108 @@ def library() -> rx.Component:
                             subscriptions_tab(),
                             value="subscriptions",
                         ),
+                        default_value="new_releases",
                         display="flex",
                         flex_direction="column",
                         flex_grow="1",
                         width="100%",
                     ),
-                    width='36rem',
+                    flex_direction="column",
+                    flex_grow="1",
+                    max_width='36rem',
+                    width='100%',
                 ),
-                justify="center", # Keeps the content centered
+                flex_direction="column",
+                align="center",
                 width="100%",
             ),
             background_color="var(--gray-1)",
-            flex_direction="column",
+            flex_direction="row",
             flex_grow="1",
             width="100%",
         ),
-        flex_direction="row",
+        flex_direction="column",
         height="100vh",
         width="100%",
     )
 
 def new_releases_tab() -> rx.Component:
     return rx.flex(
-        rx.scroll_area(
-            rx.flex(
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                rx.card("New releases will be displayed here..."),
-                flex_direction="column",
-                gap="1rem",
-                width="100%",
-            ),
-            padding="1rem",
-            width="100%",
-        ),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        id="new_releases",
+        flex_direction="column",
+        padding="4.5rem 0 0 0",
+        scroll_margin_top="4.5rem",
+        width="100%",
+        class_name="divide-y divide-[var(--gray-3)]",
     )
 
 def all_content_tab() -> rx.Component:
     return rx.flex(
-        rx.callout(
-            "All content goes here...",
-            padding="1rem",
-            width="100%"
-        ),
-        padding="2rem",
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        id="all_content",
+        flex_direction="column",
+        padding="4.5rem 0 0 0",
+        scroll_margin_top="4.5rem",
         width="100%",
+        class_name="divide-y divide-[var(--gray-3)]",
     )
 
 def subscriptions_tab() -> rx.Component:
     return rx.flex(
-        rx.callout(
-            "Subscription content goes here...",
-            padding="1rem",
-            width="100%"
-        ),
-        padding="2rem",
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        id="subscriptions",
+        flex_direction="column",
+        padding="4.5rem 0 0 0",
+        scroll_margin_top="4.5rem",
         width="100%",
+        class_name="divide-y divide-[var(--gray-3)]",
+    )
+
+def mockup_element_post() -> rx.Component:
+    return rx.flex(
+        # Profile picture container
+        rx.flex(
+            rx.skeleton(
+                height="3rem",
+                width="3rem",
+                border_radius="full",
+            ),
+            flex_direction="column",
+            justify="start",
+        ),
+        # Element content container
+        rx.flex(
+            rx.skeleton(
+                height="1.5rem",
+            ),
+            rx.skeleton(
+                height="5.5rem",
+            ),
+            rx.skeleton(
+                height="1.5rem",
+            ),
+            flex_direction="column",
+            flex_grow="1",
+            gap="1rem",
+            padding="0 1rem"
+        ),
+        flex_direction="row",
+        flex_grow="1",
+        padding="1.25rem 1rem",
     )
