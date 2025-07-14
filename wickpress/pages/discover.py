@@ -1,8 +1,27 @@
 
 import reflex as rx
 
-from ..components import navbar, navbar_side
+from ..components.nav_bars import navbar, navbar_side
+from ..components.nav_panel import nav_panel
 from ..states.base import BaseState
+
+discover_filters: list[str] = [
+    "Trending",
+    "New Releases",
+    "Popular",
+    "Short Stories",
+    "Upcoming",
+    "Editor's Picks",
+    "Most Read",
+    "Most Shared",
+    "Cyberpunk",
+    "Fantasy",
+    "Science Fiction",
+    "Horror",
+    "Romance",
+    "Mystery",
+    "Thriller",
+]
 
 @rx.page(
     route="/discover",
@@ -23,10 +42,9 @@ def discover() -> rx.Component:
 
                 # Main content area, centered and width-limited
                 rx.flex(
-
+                    nav_panel(discover_content(), discover_filters),
                     flex_direction="column",
                     flex_grow="1",
-                    max_width='36rem',
                     width='100%',
                 ),
                 flex_direction="column",
@@ -43,37 +61,13 @@ def discover() -> rx.Component:
         width="100%",
     )
 
-def new_releases_tab() -> rx.Component:
+def discover_content() -> rx.Component:
     return rx.flex(
-        mockup_element_post(),
-        id="new_releases",
+        rx.text("Discover content goes here."),
+        border="1px solid black",
         flex_direction="column",
-        padding="4.5rem 0 0 0",
-        scroll_margin_top="4.5rem",
-        width="100%",
-        class_name="divide-y divide-[var(--gray-3)]",
-    )
-
-def all_content_tab() -> rx.Component:
-    return rx.flex(
-        mockup_element_post(),
-        id="all_content",
-        flex_direction="column",
-        padding="4.5rem 0 0 0",
-        scroll_margin_top="4.5rem",
-        width="100%",
-        class_name="divide-y divide-[var(--gray-3)]",
-    )
-
-def subscriptions_tab() -> rx.Component:
-    return rx.flex(
-        mockup_element_post(),
-        id="subscriptions",
-        flex_direction="column",
-        padding="4.5rem 0 0 0",
-        scroll_margin_top="4.5rem",
-        width="100%",
-        class_name="divide-y divide-[var(--gray-3)]",
+        flex_grow="1",
+        padding="1rem",
     )
 
 def mockup_element_post() -> rx.Component:

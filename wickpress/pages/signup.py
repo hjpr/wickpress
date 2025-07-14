@@ -2,7 +2,7 @@
 import reflex as rx
 
 from ..states.auth import AuthState
-from ..components.navbars import navbar_back
+from ..components.nav_bars import navbar_back
 
 @rx.page(
     route="/sign-up",

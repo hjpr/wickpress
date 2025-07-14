@@ -54,7 +54,7 @@ def messages() -> rx.Component:
                             read_tab(),
                             value="read",
                         ),
-                        default_value="new_releases",
+                        default_value="unread",
                         display="flex",
                         flex_direction="column",
                         flex_grow="1",

@@ -52,3 +52,10 @@ class PageState(BaseState):
         yield PageState.setvar("search_modal_open", True)
         console.print(f"Search submitted: {search_input}")
         yield PageState.setvar("is_loading", False)
+
+    def default_script_callback(*args, **kwargs) -> Iterable[Callable]:
+        """
+        Default script callback for handling script calls.
+        This can be overridden in specific pages or components.
+        """
+        console.print(f"Frontend javascript executed.")

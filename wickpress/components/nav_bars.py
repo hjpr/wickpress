@@ -1,7 +1,7 @@
 import reflex as rx
 
-from ..components.menus import mobile_menu
-from ..components.modals import search_modal_for_navbar
+from .menus import mobile_menu
+from .modals import search_modal_for_navbar
 from reflex.style import toggle_color_mode
 from ..states.page import PageState
 
