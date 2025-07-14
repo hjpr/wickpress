@@ -164,17 +164,14 @@ def navbar_side() -> rx.Component:
                 # Home button
                 rx.flex(
                     rx.tooltip(
-                        rx.button(
+                        rx.flex(
                             rx.icon(
                                 "home",
                                 color="var(--gray-10)",
                             ),
+                            align="center",
+                            justify="center",
                             cursor="pointer",
-                            size=rx.breakpoints(
-                                initial="2",
-                                md="3",
-                            ),
-                            variant="ghost",
                             height="100%",
                             width="100%",
                             on_click=rx.redirect("/home")
@@ -182,23 +179,26 @@ def navbar_side() -> rx.Component:
                         side="right",
                         content="Home",
                     ),
-                    height="2.5rem",
-                    width="2rem"
+                    background_color=rx.cond(
+                        PageState.current_page == "/home",
+                        "var(--gray-3)",
+                        "none"
+                    ),
+                    border_radius="0.5rem",
+                    height="3.5rem",
+                    width="3.5rem"
                 ),
                 # Library button
                 rx.flex(
                     rx.tooltip(
-                        rx.button(
+                        rx.flex(
                             rx.icon(
                                 "library-big",
                                 color="var(--gray-10)",
                             ),
                             cursor="pointer",
-                            size=rx.breakpoints(
-                                initial="2",
-                                md="3",
-                            ),
-                            variant="ghost",
+                            align="center",
+                            justify="center",
                             height="100%",
                             width="100%",
                             on_click=rx.redirect("/library")
@@ -206,23 +206,59 @@ def navbar_side() -> rx.Component:
                         side="right",
                         content="Library",
                     ),
-                    height="2.5rem",
-                    width="2rem"
+                    background_color=rx.cond(
+                        PageState.current_page == "/library",
+                        "var(--gray-3)",
+                        "none"
+                    ),
+                    border_radius="0.5rem",
+                    height="3.5rem",
+                    width="3.5rem",
+                    _hover={
+                        "backgroundColor": "var(--gray-3)"
+                    },
+                ),
+                # Discover button
+                rx.flex(
+                    rx.tooltip(
+                        rx.flex(
+                            rx.icon(
+                                "telescope",
+                                color="var(--gray-10)",
+                            ),
+                            align="center",
+                            justify="center",
+                            cursor="pointer",
+                            height="100%",
+                            width="100%",
+                            on_click=rx.redirect("/discover")
+                        ),
+                        side="right",
+                        content="Discover",
+                    ),
+                    background_color=rx.cond(
+                        PageState.current_page == "/discover",
+                        "var(--gray-3)",
+                        "none"
+                    ),
+                    border_radius="0.5rem",
+                    height="3.5rem",
+                    width="3.5rem",
+                    _hover={
+                        "backgroundColor": "var(--gray-3)"
+                    },
                 ),
                 # Messages button
                 rx.flex(
                     rx.tooltip(
-                        rx.button(
+                        rx.flex(
                             rx.icon(
                                 "mail",
                                 color="var(--gray-10)",
                             ),
+                            align="center",
+                            justify="center",
                             cursor="pointer",
-                            size=rx.breakpoints(
-                                initial="2",
-                                md="3",
-                            ),
-                            variant="ghost",
                             height="100%",
                             width="100%",
                             on_click=rx.redirect("/messages")
@@ -230,23 +266,29 @@ def navbar_side() -> rx.Component:
                         side="right",
                         content="Messages",
                     ),
-                    height="2.5rem",
-                    width="2rem"
+                    background_color=rx.cond(
+                        PageState.current_page == "/messages",
+                        "var(--gray-3)",
+                        "none"
+                    ),
+                    border_radius="0.5rem",
+                    height="3.5rem",
+                    width="3.5rem",
+                    _hover={
+                        "backgroundColor": "var(--gray-3)"
+                    },
                 ),
                 # Search button
                 rx.flex(
                     rx.tooltip(
-                        rx.button(
+                        rx.flex(
                             rx.icon(
                                 "search",
                                 color="var(--gray-10)",
                             ),
+                            align="center",
+                            justify="center",
                             cursor="pointer",
-                            size=rx.breakpoints(
-                                initial="2",
-                                md="3",
-                            ),
-                            variant="ghost",
                             height="100%",
                             width="100%",
                             on_click=PageState.setvar("search_modal_open", ~PageState.search_modal_open)
@@ -254,8 +296,12 @@ def navbar_side() -> rx.Component:
                         side="right",
                         content="Search",
                     ),
-                    height="2.5rem",
-                    width="2rem"
+                    border_radius="0.5rem",
+                    height="3.5rem",
+                    width="3.5rem",
+                    _hover={
+                        "backgroundColor": "var(--gray-3)"
+                    },
                 ),
                 flex_direction="column",
                 flex_shrink="0",

@@ -1,5 +1,6 @@
 from .forgot_password import forgot_password
 from .about import about
+from .discover import discover
 from .home import home
 from .index import index
 from .library import library

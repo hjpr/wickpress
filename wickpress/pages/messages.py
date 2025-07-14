@@ -10,29 +10,124 @@ from ..states.base import BaseState
 )
 def messages() -> rx.Component:
     return rx.flex(
+        navbar(),
+
+        # Contains side navigation and main content
         rx.flex(
+
+            # Sidebar for navigation
             navbar_side(),
-            display=["none", "none", "flex", "flex", "flex"],
-        ),
-        rx.flex(
-            navbar(),
-            # Content area for the main page
+
+            # Main content container
             rx.flex(
-                rx.card(
-                    height='100%',
-                    width='36rem',
+
+                # Main content area, centered and width-limited
+                rx.flex(
+                    rx.tabs.root(
+                        rx.tabs.list(
+                            rx.tabs.trigger(
+                                "Unread",
+                                value="unread",
+                                cursor="pointer",
+                                width="50%",
+                                on_click=rx.scroll_to(elem_id="unread")
+                            ),
+                            rx.tabs.trigger(
+                                "Read",
+                                value="read",
+                                cursor="pointer",
+                                width="50%",
+                                on_click=rx.scroll_to(elem_id="read")
+                            ),
+                            bg="var(--gray-1)",
+                            position="sticky",
+                            top="4.5rem",
+                            width="100%",
+                            z_index="10",
+                        ),
+                        rx.tabs.content(
+                            unread_tab(),
+                            flex_grow="1",
+                            value="unread",
+                        ),
+                        rx.tabs.content(
+                            read_tab(),
+                            value="read",
+                        ),
+                        default_value="new_releases",
+                        display="flex",
+                        flex_direction="column",
+                        flex_grow="1",
+                        width="100%",
+                    ),
+                    flex_direction="column",
+                    flex_grow="1",
+                    max_width='36rem',
+                    width='100%',
                 ),
-                height="100%",
-                justify="center",
-                padding="1rem",
+                flex_direction="column",
+                align="center",
                 width="100%",
             ),
             background_color="var(--gray-1)",
-            flex_direction="column",
+            flex_direction="row",
             flex_grow="1",
             width="100%",
         ),
-        flex_direction="row",
-        min_height="100vh",
+        flex_direction="column",
+        height="100vh",
         width="100%",
+    )
+
+def unread_tab() -> rx.Component:
+    return rx.flex(
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        id="unread",
+        flex_direction="column",
+        padding="4.5rem 0 0 0",
+        scroll_margin_top="4.5rem",
+        width="100%",
+        class_name="divide-y divide-[var(--gray-3)]",
+    )
+
+def read_tab() -> rx.Component:
+    return rx.flex(
+        mockup_element_post(),
+        mockup_element_post(),
+        mockup_element_post(),
+        id="read",
+        flex_direction="column",
+        padding="4.5rem 0 0 0",
+        scroll_margin_top="4.5rem",
+        width="100%",
+        class_name="divide-y divide-[var(--gray-3)]",
+    )
+
+def mockup_element_post() -> rx.Component:
+    return rx.flex(
+        # Profile picture container
+        rx.flex(
+            rx.skeleton(
+                height="3rem",
+                width="3rem",
+                border_radius="full",
+            ),
+            flex_direction="column",
+            justify="start",
+        ),
+        # Element content container
+        rx.flex(
+            rx.skeleton(
+                height="5.5rem",
+            ),
+            flex_direction="column",
+            flex_grow="1",
+            gap="1rem",
+            padding="0 1rem"
+        ),
+        flex_direction="row",
+        flex_grow="1",
+        padding="1.25rem 1rem",
     )

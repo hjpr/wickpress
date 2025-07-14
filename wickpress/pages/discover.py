@@ -5,10 +5,10 @@ from ..components import navbar, navbar_side
 from ..states.base import BaseState
 
 @rx.page(
-    route="/library",
-    title="Library - Wick Press"
+    route="/discover",
+    title="Discover - Wick Press"
 )
-def library() -> rx.Component:
+def discover() -> rx.Component:
     return rx.flex(
         navbar(),
 
@@ -23,54 +23,7 @@ def library() -> rx.Component:
 
                 # Main content area, centered and width-limited
                 rx.flex(
-                    rx.tabs.root(
-                        rx.tabs.list(
-                            rx.tabs.trigger(
-                                "New Releases",
-                                value="new_releases",
-                                cursor="pointer",
-                                width="33%",
-                                on_click=rx.scroll_to(elem_id="new_releases")
-                            ),
-                            rx.tabs.trigger(
-                                "All Content",
-                                value="all_content",
-                                cursor="pointer",
-                                width="34%",
-                                on_click=rx.scroll_to(elem_id="all_content")
-                            ),
-                            rx.tabs.trigger(
-                                "Subscriptions",
-                                value="subscriptions",
-                                cursor="pointer",
-                                width="33%",
-                                on_click=rx.scroll_to(elem_id="subscriptions")
-                            ),
-                            bg="var(--gray-1)",
-                            position="sticky",
-                            top="4.5rem",
-                            width="100%",
-                            z_index="10",
-                        ),
-                        rx.tabs.content(
-                            new_releases_tab(),
-                            flex_grow="1",
-                            value="new_releases",
-                        ),
-                        rx.tabs.content(
-                            all_content_tab(),
-                            value="all_content",
-                        ),
-                        rx.tabs.content(
-                            subscriptions_tab(),
-                            value="subscriptions",
-                        ),
-                        default_value="new_releases",
-                        display="flex",
-                        flex_direction="column",
-                        flex_grow="1",
-                        width="100%",
-                    ),
+
                     flex_direction="column",
                     flex_grow="1",
                     max_width='36rem',
