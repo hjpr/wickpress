@@ -44,7 +44,8 @@ def navbar() -> rx.Component:
                         PageState.current_page != "/about",
                         rx.heading(PageState.current_page_formatted)
                     ),
-                    padding="0 1rem"
+                    padding="0 1rem",
+                    user_select="none",
                 ),
 
                 # Search input field only on the home page.
@@ -132,7 +133,10 @@ def navbar_back() -> rx.Component:
                 cursor="pointer",
                 size="3",
                 variant="soft",
-                on_click=rx.call_script("history.back()")
+                on_click=rx.call_script(
+                    "history.back()",
+                    callback=PageState.default_script_callback
+                )
             ),
             rx.button(
                 rx.color_mode_cond(
