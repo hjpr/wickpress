@@ -164,6 +164,8 @@ def navbar_side() -> rx.Component:
     return rx.flex(
         # Holds logo and buttons.
         rx.flex(
+
+            # Holds buttons
             rx.flex(
                 # Home button
                 rx.flex(
@@ -309,7 +311,7 @@ def navbar_side() -> rx.Component:
                 ),
                 flex_direction="column",
                 flex_shrink="0",
-                gap="1.25rem",
+                gap="1rem",
                 align="center",
                 justify="center"
             ),
