@@ -9,35 +9,49 @@ from ..states.page import PageState
 def navbar() -> rx.Component:
     return rx.flex(
         rx.flex(
-            rx.link(
-                "WP",
-                size="7",
-                href="/home",
-                display=["none", "none", "inline", "inline", "inline"],
+            rx.flex(
+                rx.link(
+                    "WP",
+                    size="7",
+                    href="/home",
+                ),
+                height="4.5rem",
+                width="4.5rem",
+                align="center",
+                justify="center",
+                border_right=rx.cond(
+                    PageState.current_page == "/about",
+                    "none",
+                    "1px solid var(--gray-3)",
+                ),
+                border_bottom=rx.cond(
+                    PageState.current_page == "/about",
+                    "1px solid var(--gray-3)",
+                    "none"
+                ),
+                display=rx.breakpoints(
+                    xs="none",
+                    sm="flex",
+                    md="flex",
+                    lg="flex",
+                    xl="flex"
+                )
             ),
-            border_right="1px solid var(--gray-3)",
+
+            mobile_menu(),
+
             flex_shrink="0",
             align="center",
             justify="center",
             height="4.5rem",
             width="4.5rem",
-            display=rx.breakpoints(
-                xs="none",
-                sm="flex",
-                md="flex",
-                lg="flex",
-                xl="flex"
-            )
+
         ),
 
         # Main navigation bar with logo and buttons.
         rx.flex(
             # Holds logo and buttons.
             rx.flex(
-                rx.flex(
-                    mobile_menu(),
-                    padding="0 0 0 1rem",
-                ),
                 rx.flex(
                     # Current page title.
                     rx.cond(

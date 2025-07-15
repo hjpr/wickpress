@@ -4,12 +4,25 @@ import reflex as rx
 def mobile_menu() -> rx.Component:
     return rx.drawer.root(
         rx.drawer.trigger(
-            rx.icon(
-                "menu",
-                size=24,
-                cursor="pointer",
-            ),
-            display=["inline", "inline", "none", "none", "none"],
+            rx.flex(
+                rx.icon(
+                    "menu",
+                    size=24,
+                    cursor="pointer",
+                ),
+                align="center",
+                justify="center",
+                width="4.5rem",
+                height="4.5rem",
+                border_bottom="1px solid var(--gray-3)",
+                display=rx.breakpoints(
+                    xs="flex",
+                    sm="none",
+                    md="none",
+                    lg="none",
+                    xl="none"
+                ),
+            )
         ),
         rx.drawer.portal(
             rx.drawer.content(

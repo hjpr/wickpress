@@ -21,6 +21,7 @@ class PageState(BaseState):
         {"name": "Another interesting topic"},
         {"name": "Latest news in tech"},
     ]
+    selected_filter: str = "All"
 
     @rx.var
     def current_page(self) -> str:
@@ -53,9 +54,8 @@ class PageState(BaseState):
         console.print(f"Search submitted: {search_input}")
         yield PageState.setvar("is_loading", False)
 
-    def default_script_callback(*args, **kwargs) -> Iterable[Callable]:
+    def default_script_callback(self, callback: any) -> Iterable[Callable]:
         """
-        Default script callback for handling script calls.
-        This can be overridden in specific pages or components.
+        Default script callback for handling script calls with no callback.
+        Suppresses logging [Reflex Frontend Exception] errors.
         """
-        console.print(f"Frontend javascript executed.")
