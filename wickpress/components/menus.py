@@ -1,6 +1,8 @@
 
 import reflex as rx
 
+from ..states.auth import AuthState
+
 def mobile_menu() -> rx.Component:
     return rx.drawer.root(
         rx.drawer.trigger(
@@ -38,4 +40,20 @@ def mobile_menu() -> rx.Component:
             )
         ),
         direction="left",
+    )
+
+def account_menu(button: rx.Component) -> rx.Component:
+    return rx.menu.root(
+        rx.menu.trigger(
+            button
+        ),
+        rx.menu.content(
+            rx.menu.item(
+                "Logout",
+                on_click=[
+                    AuthState.log_out,
+                    rx.redirect("/")
+                ]
+            )
+        )
     )

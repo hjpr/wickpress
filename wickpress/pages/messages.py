@@ -1,6 +1,7 @@
 
 import reflex as rx
 
+from ..components.modals import new_message_modal
 from ..components.nav_bars import navbar, navbar_side
 from ..states.message import MessageState
 from ..states.page import PageState
@@ -10,7 +11,7 @@ messages_filters: list[str] = [
     "Unread",
     "Read",
     "Sent",
-    "Favorites",
+    "Starred",
     "Trash",
 ]
 
@@ -63,6 +64,30 @@ def nav_panel_messages(
         sticky: bool = True
         ) -> rx.Component:
     return rx.flex(
+
+        # Buttons for create, trash, starred, etc.
+        rx.flex(
+            rx.flex(
+                new_message_modal()
+            ),
+            rx.flex(
+                rx.button(
+                    rx.icon("square-check", size=18),
+                    variant="soft"
+                ),
+                rx.button(
+                    rx.icon("trash", size=18),
+                    variant="soft"
+                ),
+                bg="var(--grey-3)",
+                gap="1rem",
+                flex_direction="row",
+            ),
+            padding="1rem 1rem 0rem 1rem",
+            justify_content="space-between",
+            max_width="36rem",
+            width="100%"
+        ),
 
         rx.cond(
             overflow,
@@ -129,6 +154,7 @@ def nav_panel_messages(
                     height="3rem",
                     padding="0 1rem",
                     align="center",
+                    justify="end",
                     overflow_x="scroll",
                     scrollbar_width="none"
                 ),
@@ -186,18 +212,84 @@ def filter_element(filter: str) -> rx.Component:
 
 def messages_content() -> rx.Component:
     return rx.flex(
-        mockup_element_post(),
-        mockup_element_post(),
-        mockup_element_post(),
-        mockup_element_post(),
-        mockup_element_post(),
-        mockup_element_post(),
-        mockup_element_post(),
-        mockup_element_post(),
-        mockup_element_post(),
+        rx.cond(
+            # If loading, show skeletons
+            MessageState.is_loading,
+            rx.flex(
+                mockup_element_post(),
+                mockup_element_post(),
+                mockup_element_post(),
+                mockup_element_post(),
+                mockup_element_post(),
+                mockup_element_post(),
+                mockup_element_post(),
+                mockup_element_post(),
+                flex_direction="column",
+                flex_grow="1",
+                class_name="divide-y divide-[var(--gray-3)]",
+            ),
+
+            # If there are messages, display, otherwise empty icon
+            rx.flex(
+                rx.cond(
+                    MessageState.messages,
+                    rx.foreach(
+                        MessageState.messages,
+                        message_layout
+                    ),
+                    rx.flex(
+                        rx.flex(
+                            rx.icon("mail-open", color="var(--gray-9)"),
+                            rx.text("No messages"),
+                            flex_direction="column",
+                            gap="0.5rem",
+                            align="center",
+                            padding="4rem"
+                        ),
+                        flex_direction="row",
+                        justify="center",
+                        border_top="1px solid var(--gray-3)",
+                        border_bottom="1px solid var(--gray-3)",
+                    )
+                ),
+                flex_direction="column",
+                flex_grow="1",
+                padding="0rem 1rem 1rem 1rem",
+                class_name="divide-y divide-[var(--gray-3)]",
+            )
+        ),
         flex_direction="column",
         flex_grow="1",
-        class_name="divide-y divide-[var(--gray-3)]",
+    )
+
+def message_layout(message: dict[str, dict[str, str]]) -> rx.Component:
+    return rx.flex(
+        # Profile picture container
+        rx.flex(
+            rx.skeleton(
+                height="3rem",
+                width="3rem",
+                border_radius="full",
+            ),
+            flex_direction="column",
+            justify="start",
+        ),
+        # Content container
+        rx.flex(
+            rx.text(
+                message["content"]["subject"]
+            ),
+            rx.text(
+                message["content"]["body"]
+            ),
+            flex_direction="column",
+            flex_grow="1",
+            gap="1rem",
+            padding="0 1rem"
+        ),
+        flex_direction="row",
+        flex_grow="1",
+        padding="1.25rem 1rem",
     )
 
 def mockup_element_post() -> rx.Component:

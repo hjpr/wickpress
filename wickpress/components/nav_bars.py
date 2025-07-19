@@ -1,8 +1,11 @@
 import reflex as rx
 
-from .menus import mobile_menu
-from .modals import search_modal_for_navbar
 from reflex.style import toggle_color_mode
+
+from .menus import mobile_menu, account_menu
+from .modals import search_modal_for_navbar
+from ..states.auth import AuthState
+from ..states.base import BaseState
 from ..states.page import PageState
 
 
@@ -101,13 +104,25 @@ def navbar() -> rx.Component:
                             cursor="pointer",
                         )
                     ),
-                    rx.button(
-                        rx.text(
-                            "Sign in",
-                            on_click=rx.redirect("/sign-in")
+
+                    # Show sign in button when user is not logged in.
+                    rx.cond(
+                        BaseState.user_is_authenticated,
+                        account_menu(
+                            rx.button(
+                                rx.icon("user", size=18),
+                                cursor="pointer",
+                                variant="soft"
+                            )
                         ),
-                        cursor="pointer",
-                        variant="soft",
+                        rx.button(
+                            rx.text(
+                                "Sign in",
+                                on_click=rx.redirect("/sign-in")
+                            ),
+                            cursor="pointer",
+                            variant="soft",
+                        )
                     ),
                     rx.button(
                         rx.color_mode_cond(

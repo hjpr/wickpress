@@ -1,6 +1,7 @@
 
 import reflex as rx
 
+from ..states.message import MessageState
 from ..states.page import PageState
 
 def search_modal_for_navbar() -> rx.Component:
@@ -138,6 +139,9 @@ def render_trending_topics(topic: dict) -> rx.Component:
         rx.flex(
             rx.flex(
                 rx.text(f"{topic["name"]}", size="3", weight="medium"),
+                align="center",
+                justify="center",
+                padding="0.25rem 0rem 0rem 0rem"
             ),
             flex_direction="column",
             justify="center",
@@ -193,4 +197,108 @@ def skeleton_search_results() -> rx.Component:
             PageState.trending_topics,
             render_trending_topics
         )
+    )
+
+def new_message_modal() -> rx.Component:
+    return rx.dialog.root(
+        rx.dialog.trigger(
+            rx.flex(
+                rx.button(
+                    rx.icon("pencil", size=18),
+                    loading=MessageState.is_loading,
+                    cursor="pointer",
+                    on_click=MessageState.setvar("show_new_message_modal", True)
+                ),
+                align="center",
+                justify="center",
+                height="100%",
+                width='2rem',
+            )
+        ),
+        rx.dialog.content(
+            rx.form(
+                rx.flex(
+                    rx.flex(
+                        rx.button(
+                            rx.icon("send", size=18),
+                            type="submit",
+                            cursor="pointer",
+                            size="2",
+                            on_click=MessageState.setvar("show_new_message_modal", False),
+                        ),
+                        rx.text("Compose"),
+                        rx.button(
+                            rx.text("Cancel"),
+                            cursor="pointer",
+                            size="2",
+                            variant="soft",
+                            on_click=MessageState.setvar("show_new_message_modal", False),
+                        ),
+                        align="center",
+                        justify="between",
+                        height="3rem",
+                        padding="2rem 1rem 2rem 1rem",
+                        position="sticky",
+                        top="0",
+                        width="100%",
+                    ),
+                    rx.separator(
+                        z_index="10",
+                    ),
+                    rx.flex(
+                        rx.flex(
+                            rx.flex(
+                                rx.text("To:"),
+                                padding="0.25rem 0.5rem 0rem 0rem"
+                            ),
+                            rx.input(
+                                name="recipient",
+                                border="1px solid var(--gray-3)",
+                                box_shadow="none",
+                                width="100%"
+                            ),
+                        ),
+                        rx.flex(
+                            rx.flex(
+                                rx.text("Subject:"),
+                                padding="0.25rem 0.5rem 0rem 0rem"
+                            ),
+                            rx.input(
+                                name="subject",
+                                size="2",
+                                border="1px solid var(--gray-3)",
+                                box_shadow="none",
+                                width="100%"
+                            ),
+                        ),
+                        rx.flex(
+                            rx.text_area(
+                                name="body",
+                                border="1px solid var(--gray-3)",
+                                box_shadow="none",
+                                width="100%"
+                            ),
+                            flex_grow="1",
+                            width="100%"
+                        ),
+
+                        rx.flex(
+                            height="3rem",
+                        ),
+                        flex_direction="column",
+                        flex_grow="1",
+                        gap="1rem",
+                        padding="1rem",
+                        width="100%"
+                    ),
+                    flex_direction="column",
+                    height="36rem",
+                ),
+                on_submit=MessageState.send_message,
+                width="100%"
+            ),
+            padding="0 0 0 0",
+            on_pointer_down_outside=MessageState.setvar("show_new_message_modal", False),
+        ),
+        open=MessageState.show_new_message_modal,
     )

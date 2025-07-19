@@ -1,11 +1,13 @@
 
 import reflex as rx
 
-from .base import BaseState
 from loguru import logger
 from httpx import HTTPStatusError
 from rich.console import Console
 from typing import Callable, Iterable
+
+from .base import BaseState
+from .user import UserState
 
 console = Console()
 
@@ -13,14 +15,33 @@ class AuthState(BaseState):
     
     def sign_in(self, form_data: dict) -> Iterable[Callable]:
         try:
+            user = {}
             email = form_data.get("email")
             password = form_data.get("password")
-            console.print(f"Signing in {email} via password...")
-            self.sign_in_with_password(
+            user_data = self.sign_in_with_password(
                 email=email,
-                password=password,
+                password=password
             )
-            console.print(f"Successfully signed in {email} with password.")
+
+            # Pull supabase user object to state
+            user["supabase"] = user_data.get("user", {})
+
+            # Pull website profile to state, if first login, create entry
+            user["wickpress"] = (
+                self.query()
+                .table("profiles")
+                .select("*")
+                .eq("id", user["supabase"]["id"])
+                .execute()
+            )
+
+            if not user["wickpress"]:
+                self.query().table("profiles").insert({"id": user["supabase"]["id"]}).execute()
+            else:
+                user["wickpress"] = user["wickpress"][0]
+
+            yield UserState.setvar("user", user)
+            yield rx.redirect("/home")
 
         except HTTPStatusError as e:
             console.print_exception()

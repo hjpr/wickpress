@@ -2,6 +2,7 @@
 import reflex as rx
 
 from ..components import navbar, navbar_side
+from ..states.auth import AuthState
 from ..states.base import BaseState
 
 @rx.page(
