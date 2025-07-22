@@ -257,6 +257,19 @@ wheels = [
 ]
 
 [[package]]
+name = "loguru"
+version = "0.7.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "win32-setctime", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3a/05/a1dae3dffd1116099471c643b8924f5aa6524411dc6c63fdae648c4f1aca/loguru-0.7.3.tar.gz", hash = "sha256:19480589e77d47b8d85b2c827ad95d49bf31b0dcde16593892eb51dd18706eb6", size = 63559, upload-time = "2024-12-06T11:20:56.608Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0c/29/0348de65b8cc732daa3e33e67806420b2ae89bdce2b04af740289c5c6c8c/loguru-0.7.3-py3-none-any.whl", hash = "sha256:31a33c10c8e1e10422bfd431aeb5d351c7cf7fa671e3c4df004162264b28220c", size = 61595, upload-time = "2024-12-06T11:20:54.538Z" },
+]
+
+[[package]]
 name = "mako"
 version = "1.3.10"
 source = { registry = "https://pypi.org/simple" }
@@ -510,7 +523,7 @@ wheels = [
 
 [[package]]
 name = "reflex"
-version = "0.8.0"
+version = "0.8.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "alembic" },
@@ -532,9 +545,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "wrapt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/48/01/f7a471af9dce698d2db6b66a2970039be040707dad20b42308e023aaa792/reflex-0.8.0.tar.gz", hash = "sha256:78d810fb7f05b65fd81d39a4b62b7b9716c0ff7fe7a84bedfc403d544ab700b4", size = 583434, upload-time = "2025-07-01T19:23:00.861Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/08/42/c314de5e0026836c04962a2f5f9024a32e36ae1ae741c2e447f4274e4cbd/reflex-0.8.2.tar.gz", hash = "sha256:de27bdc3ca73b154aba3da3b516e5d5f7849e749f537bda970a4e7e04e1bd1b4", size = 588802, upload-time = "2025-07-14T20:38:02.669Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4d/27/df1ef5185538b0221eb964a36b4ef6db29c76a1dff12be0ea7ab39129348/reflex-0.8.0-py3-none-any.whl", hash = "sha256:7e21b092fbb3d1c2d0add84c5f482ba7e6573a0c05dfa690d6f12d8f79531257", size = 876944, upload-time = "2025-07-01T19:22:58.958Z" },
+    { url = "https://files.pythonhosted.org/packages/eb/77/8a8a85a4444b98629eac4d91d9bca6cf7455c4983f0acba1b61a7be0a12b/reflex-0.8.2-py3-none-any.whl", hash = "sha256:a0ccaabacf12eed57fdb293654c5e7d7a2dd25f499e56f82fced01088393771e", size = 883732, upload-time = "2025-07-14T20:38:00.176Z" },
 ]
 
 [[package]]
@@ -645,17 +658,18 @@ wheels = [
 
 [[package]]
 name = "suplex"
-version = "0.2.2"
+version = "0.2.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dotenv" },
     { name = "httpx" },
     { name = "pyjwt" },
     { name = "reflex" },
+    { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3d/b2/60294a613fe93e6935b6c91a4ccf375b3d1a16ae66a6d5a7d20994f0ef29/suplex-0.2.2.tar.gz", hash = "sha256:2ab6cbc357e90b4796a0e9b0276ea38a3181c6cbb7293ff6b00e058ffbaa7dff", size = 14930, upload-time = "2025-04-29T23:17:24.068Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/38/8e/ce1a1932d4b338562125ca6f2e06284d33ab69ef12a8ae63ed37f561e861/suplex-0.2.4.tar.gz", hash = "sha256:c4a362491500b34983cc03114d158a9139e58903f627abe8b0c45ff8b7792323", size = 15861, upload-time = "2025-07-21T18:07:17.159Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a4/27/01313b08ca543b669f7bd841b6b0414f8b799d2849b3f426bdca4af895a6/suplex-0.2.2-py3-none-any.whl", hash = "sha256:1b0517de7ff88f421c1f45bd5e193507d5748c05da216ace54f75e7eccd97c44", size = 15535, upload-time = "2025-04-29T23:17:22.825Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/b4/d529f67cbdf78905dbaf571ea7b3b8bbbe4949b7144422a158ccfed7a57b/suplex-0.2.4-py3-none-any.whl", hash = "sha256:1732b33c8d65941c9cb857205d6e9c32083bd408fc67e283da68792181729885", size = 16480, upload-time = "2025-07-21T18:07:16.3Z" },
 ]
 
 [[package]]
@@ -760,14 +774,25 @@ name = "wickpress"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "loguru" },
     { name = "reflex" },
     { name = "suplex" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "reflex", specifier = ">=0.8.0" },
-    { name = "suplex", specifier = ">=0.2.2" },
+    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "reflex", specifier = ">=0.8.2" },
+    { name = "suplex", specifier = ">=0.2.4" },
+]
+
+[[package]]
+name = "win32-setctime"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b3/8f/705086c9d734d3b663af0e9bb3d4de6578d08f46b1b101c2442fd9aecaa2/win32_setctime-1.2.0.tar.gz", hash = "sha256:ae1fdf948f5640aae05c511ade119313fb6a30d7eabe25fef9764dca5873c4c0", size = 4867, upload-time = "2024-12-07T15:28:28.314Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e1/07/c6fe3ad3e685340704d314d765b7912993bcb8dc198f0e7a89382d37974b/win32_setctime-1.2.0-py3-none-any.whl", hash = "sha256:95d644c4e708aba81dc3704a116d8cbc974d70b3bdb8be1d150e36be6e9d1390", size = 4083, upload-time = "2024-12-07T15:28:26.465Z" },
 ]
 
 [[package]]

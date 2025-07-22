@@ -17,7 +17,8 @@ messages_filters: list[str] = [
 
 @rx.page(
     route="/messages",
-    title="Messages - Wick Press"
+    title="Messages - Wick Press",
+    on_load=MessageState.retrieve_messages
 )
 def messages() -> rx.Component:
     return rx.flex(
@@ -65,26 +66,23 @@ def nav_panel_messages(
         ) -> rx.Component:
     return rx.flex(
 
-        # Buttons for create, trash, starred, etc.
+        # Buttons for create, etc.
         rx.flex(
             rx.flex(
                 new_message_modal()
             ),
+            rx.flex(rx.heading(MessageState.selected_filter)),
             rx.flex(
                 rx.button(
-                    rx.icon("square-check", size=18),
-                    variant="soft"
-                ),
-                rx.button(
-                    rx.icon("trash", size=18),
+                    rx.icon("ellipsis-vertical", size=18),
                     variant="soft"
                 ),
                 bg="var(--grey-3)",
-                gap="1rem",
+                gap="0rem",
                 flex_direction="row",
             ),
-            padding="1rem 1rem 0rem 1rem",
             justify_content="space-between",
+            padding="1rem",
             max_width="36rem",
             width="100%"
         ),
@@ -152,16 +150,18 @@ def nav_panel_messages(
                     flex_grow="1",
                     gap="1rem",
                     height="3rem",
-                    padding="0 1rem",
                     align="center",
-                    justify="end",
+                    justify="start",
+                    padding_left="0.25rem",
                     overflow_x="scroll",
                     scrollbar_width="none"
                 ),
                 bg="var(--gray-1)",
+                border_top="1px solid var(--gray-3)",
                 flex_direction="row",
                 position="sticky" if sticky else "relative",
                 top="4.5rem" if sticky else "0",
+                padding="0rem 1rem",
                 max_width="36rem",
                 width="100%",
             ),
@@ -254,7 +254,6 @@ def messages_content() -> rx.Component:
                 ),
                 flex_direction="column",
                 flex_grow="1",
-                padding="0rem 1rem 1rem 1rem",
                 class_name="divide-y divide-[var(--gray-3)]",
             )
         ),
@@ -276,20 +275,29 @@ def message_layout(message: dict[str, dict[str, str]]) -> rx.Component:
         ),
         # Content container
         rx.flex(
-            rx.text(
-                message["content"]["subject"]
+            rx.flex(
+                rx.text(
+                    message["content"]["subject"]
+                ),
+                height="1rem"
             ),
-            rx.text(
-                message["content"]["body"]
+            rx.flex(
+                rx.icon("star", size=18),
+                rx.icon("trash", size=18),
+                justify="end",
+                gap="1rem",
+                height="1rem",
+                width="100%"
             ),
             flex_direction="column",
-            flex_grow="1",
             gap="1rem",
-            padding="0 1rem"
+            width="100%"
         ),
+        display="flex",
         flex_direction="row",
-        flex_grow="1",
-        padding="1.25rem 1rem",
+        justify="center",
+        gap="1rem",
+        padding="1rem"
     )
 
 def mockup_element_post() -> rx.Component:

@@ -202,17 +202,11 @@ def skeleton_search_results() -> rx.Component:
 def new_message_modal() -> rx.Component:
     return rx.dialog.root(
         rx.dialog.trigger(
-            rx.flex(
-                rx.button(
-                    rx.icon("pencil", size=18),
-                    loading=MessageState.is_loading,
-                    cursor="pointer",
-                    on_click=MessageState.setvar("show_new_message_modal", True)
-                ),
-                align="center",
-                justify="center",
-                height="100%",
-                width='2rem',
+            rx.button(
+                rx.icon("pencil", size=18),
+                loading=MessageState.is_loading,
+                cursor="pointer",
+                on_click=MessageState.setvar("show_new_message_modal", True)
             )
         ),
         rx.dialog.content(
@@ -229,6 +223,7 @@ def new_message_modal() -> rx.Component:
                         rx.text("Compose"),
                         rx.button(
                             rx.text("Cancel"),
+                            type="button",
                             cursor="pointer",
                             size="2",
                             variant="soft",
