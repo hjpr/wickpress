@@ -52,7 +52,7 @@ def account_menu(button: rx.Component) -> rx.Component:
                 "Logout",
                 on_click=[
                     AuthState.log_out,
-                    rx.redirect("/")
+                    rx.redirect("/home")
                 ]
             )
         )

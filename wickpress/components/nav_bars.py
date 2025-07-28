@@ -224,34 +224,37 @@ def navbar_side() -> rx.Component:
                     width="3.5rem"
                 ),
                 # Library button
-                rx.flex(
-                    rx.tooltip(
-                        rx.flex(
-                            rx.icon(
-                                "library-big",
-                                color="var(--gray-10)",
+                rx.cond(
+                    AuthState.user_is_authenticated,
+                    rx.flex(
+                        rx.tooltip(
+                            rx.flex(
+                                rx.icon(
+                                    "library-big",
+                                    color="var(--gray-10)",
+                                ),
+                                cursor="pointer",
+                                align="center",
+                                justify="center",
+                                height="100%",
+                                width="100%",
+                                on_click=rx.redirect("/library")
                             ),
-                            cursor="pointer",
-                            align="center",
-                            justify="center",
-                            height="100%",
-                            width="100%",
-                            on_click=rx.redirect("/library")
+                            side="right",
+                            content="Library",
                         ),
-                        side="right",
-                        content="Library",
-                    ),
-                    background_color=rx.cond(
-                        PageState.current_page == "/library",
-                        "var(--gray-3)",
-                        "none"
-                    ),
-                    border_radius="0.5rem",
-                    height="3.5rem",
-                    width="3.5rem",
-                    _hover={
-                        "backgroundColor": "var(--gray-3)"
-                    },
+                        background_color=rx.cond(
+                            PageState.current_page == "/library",
+                            "var(--gray-3)",
+                            "none"
+                        ),
+                        border_radius="0.5rem",
+                        height="3.5rem",
+                        width="3.5rem",
+                        _hover={
+                            "backgroundColor": "var(--gray-3)"
+                        },
+                    )
                 ),
                 # Discover button
                 rx.flex(
@@ -284,34 +287,37 @@ def navbar_side() -> rx.Component:
                     },
                 ),
                 # Messages button
-                rx.flex(
-                    rx.tooltip(
-                        rx.flex(
-                            rx.icon(
-                                "mail",
-                                color="var(--gray-10)",
+                rx.cond(
+                    AuthState.user_is_authenticated,
+                    rx.flex(
+                        rx.tooltip(
+                            rx.flex(
+                                rx.icon(
+                                    "mail",
+                                    color="var(--gray-10)",
+                                ),
+                                align="center",
+                                justify="center",
+                                cursor="pointer",
+                                height="100%",
+                                width="100%",
+                                on_click=rx.redirect("/messages")
                             ),
-                            align="center",
-                            justify="center",
-                            cursor="pointer",
-                            height="100%",
-                            width="100%",
-                            on_click=rx.redirect("/messages")
+                            side="right",
+                            content="Messages",
                         ),
-                        side="right",
-                        content="Messages",
-                    ),
-                    background_color=rx.cond(
-                        PageState.current_page == "/messages",
-                        "var(--gray-3)",
-                        "none"
-                    ),
-                    border_radius="0.5rem",
-                    height="3.5rem",
-                    width="3.5rem",
-                    _hover={
-                        "backgroundColor": "var(--gray-3)"
-                    },
+                        background_color=rx.cond(
+                            PageState.current_page == "/messages",
+                            "var(--gray-3)",
+                            "none"
+                        ),
+                        border_radius="0.5rem",
+                        height="3.5rem",
+                        width="3.5rem",
+                        _hover={
+                            "backgroundColor": "var(--gray-3)"
+                        },
+                    )
                 ),
                 # Search button
                 rx.flex(

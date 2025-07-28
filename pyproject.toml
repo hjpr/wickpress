@@ -6,6 +6,6 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "loguru>=0.7.3",
-    "reflex>=0.8.2",
+    "reflex>=0.8.3",
     "suplex>=0.2.5",
 ]

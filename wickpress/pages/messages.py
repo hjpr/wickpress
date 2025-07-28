@@ -1,8 +1,10 @@
 
 import reflex as rx
 
+from ..components.mail import slim_message
 from ..components.modals import new_message_modal
 from ..components.nav_bars import navbar, navbar_side
+from ..components.protected import login_protected
 from ..states.message import MessageState
 from ..states.page import PageState
 
@@ -20,6 +22,7 @@ messages_filters: list[str] = [
     title="Messages - Wick Press",
     on_load=MessageState.retrieve_messages
 )
+@login_protected
 def messages() -> rx.Component:
     return rx.flex(
         navbar(),
@@ -235,7 +238,7 @@ def messages_content() -> rx.Component:
                     MessageState.messages,
                     rx.foreach(
                         MessageState.messages,
-                        message_layout
+                        slim_message
                     ),
                     rx.flex(
                         rx.flex(
@@ -259,45 +262,6 @@ def messages_content() -> rx.Component:
         ),
         flex_direction="column",
         flex_grow="1",
-    )
-
-def message_layout(message: dict[str, dict[str, str]]) -> rx.Component:
-    return rx.flex(
-        # Profile picture container
-        rx.flex(
-            rx.skeleton(
-                height="3rem",
-                width="3rem",
-                border_radius="full",
-            ),
-            flex_direction="column",
-            justify="start",
-        ),
-        # Content container
-        rx.flex(
-            rx.flex(
-                rx.text(
-                    message["content"]["subject"]
-                ),
-                height="1rem"
-            ),
-            rx.flex(
-                rx.icon("star", size=18),
-                rx.icon("trash", size=18),
-                justify="end",
-                gap="1rem",
-                height="1rem",
-                width="100%"
-            ),
-            flex_direction="column",
-            gap="1rem",
-            width="100%"
-        ),
-        display="flex",
-        flex_direction="row",
-        justify="center",
-        gap="1rem",
-        padding="1rem"
     )
 
 def mockup_element_post() -> rx.Component:
