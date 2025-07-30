@@ -210,87 +210,68 @@ def new_message_modal() -> rx.Component:
             )
         ),
         rx.dialog.content(
-            rx.form(
+            rx.flex(
+                rx.flex(
+                    rx.button(
+                        rx.icon("send", size=18),
+                        type="button",
+                        cursor="pointer",
+                        size="2",
+                    ),
+                    rx.text("Compose"),
+                    rx.button(
+                        rx.text("Cancel"),
+                        type="button",
+                        cursor="pointer",
+                        size="2",
+                        variant="soft",
+                        on_click=MessageState.setvar("show_new_message_modal", False),
+                    ),
+                    align="center",
+                    justify="between",
+                    height="3rem",
+                    padding="2rem 1rem 2rem 1rem",
+                    position="sticky",
+                    top="0",
+                    width="100%",
+                ),
+                rx.separator(
+                    z_index="10",
+                ),
                 rx.flex(
                     rx.flex(
-                        rx.button(
-                            rx.icon("send", size=18),
-                            type="submit",
-                            cursor="pointer",
-                            size="2",
-                            on_click=MessageState.setvar("show_new_message_modal", False),
+                        rx.text_field(
+                            placeholder="To",
+                            border="1px solid var(--gray-3)",
+                            box_shadow="none",
+                            width="100%",
                         ),
-                        rx.text("Compose"),
-                        rx.button(
-                            rx.text("Cancel"),
-                            type="button",
-                            cursor="pointer",
-                            size="2",
-                            variant="soft",
-                            on_click=MessageState.setvar("show_new_message_modal", False),
-                        ),
-                        align="center",
-                        justify="between",
-                        height="3rem",
-                        padding="2rem 1rem 2rem 1rem",
-                        position="sticky",
-                        top="0",
-                        width="100%",
-                    ),
-                    rx.separator(
-                        z_index="10",
                     ),
                     rx.flex(
-                        rx.flex(
-                            rx.flex(
-                                rx.text("To:"),
-                                padding="0.25rem 0.5rem 0rem 0rem"
-                            ),
-                            rx.input(
-                                name="recipient",
-                                border="1px solid var(--gray-3)",
-                                box_shadow="none",
-                                width="100%"
-                            ),
-                        ),
-                        rx.flex(
-                            rx.flex(
-                                rx.text("Subject:"),
-                                padding="0.25rem 0.5rem 0rem 0rem"
-                            ),
-                            rx.input(
-                                name="subject",
-                                size="2",
-                                border="1px solid var(--gray-3)",
-                                box_shadow="none",
-                                width="100%"
-                            ),
-                        ),
-                        rx.flex(
-                            rx.text_area(
-                                name="body",
-                                border="1px solid var(--gray-3)",
-                                box_shadow="none",
-                                width="100%"
-                            ),
-                            flex_grow="1",
+                        rx.text_field(
+                            placeholder="Subject",
+                            border="1px solid var(--gray-3)",
+                            box_shadow="none",
                             width="100%"
                         ),
-
-                        rx.flex(
-                            height="3rem",
+                    ),
+                    rx.flex(
+                        rx.text_area(
+                            border="1px solid var(--gray-3)",
+                            box_shadow="none",
+                            width="100%"
                         ),
-                        flex_direction="column",
                         flex_grow="1",
-                        gap="1rem",
-                        padding="1rem",
                         width="100%"
                     ),
                     flex_direction="column",
-                    height="36rem",
+                    flex_grow="1",
+                    gap="1rem",
+                    padding="1rem",
+                    width="100%"
                 ),
-                on_submit=MessageState.send_message,
-                width="100%"
+                flex_direction="column",
+                height="36rem",
             ),
             padding="0 0 0 0",
             on_pointer_down_outside=MessageState.setvar("show_new_message_modal", False),

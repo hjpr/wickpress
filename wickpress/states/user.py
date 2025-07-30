@@ -1,4 +1,6 @@
 
+import reflex as rx
+
 from .base import BaseState
 
 class UserState(BaseState):
@@ -37,3 +39,7 @@ class UserState(BaseState):
     }
     """
     user: dict[str, dict[str, str]]
+
+    @rx.var
+    def user_opt_in_social(self) -> bool:
+        return True if self.user.get("wickpress", {}).get("handle") else False
