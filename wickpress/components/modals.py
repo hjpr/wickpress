@@ -1,6 +1,7 @@
 
 import reflex as rx
 
+from .popovers import message_recipient_popover
 from ..states.message import MessageState
 from ..states.page import PageState
 
@@ -200,6 +201,9 @@ def skeleton_search_results() -> rx.Component:
     )
 
 def new_message_modal() -> rx.Component:
+    """
+    Modal displayed when user wants to send a message to another user.
+    """
     return rx.dialog.root(
         rx.dialog.trigger(
             rx.button(
@@ -240,12 +244,7 @@ def new_message_modal() -> rx.Component:
                 ),
                 rx.flex(
                     rx.flex(
-                        rx.text_field(
-                            placeholder="To",
-                            border="1px solid var(--gray-3)",
-                            box_shadow="none",
-                            width="100%",
-                        ),
+                        message_recipient_popover(),
                     ),
                     rx.flex(
                         rx.text_field(

@@ -43,9 +43,19 @@ class MessageState(UserState):
 
     recipient: str
     recipient_list: list[str]
+    find_message_recipients_is_open: bool
     recipient_valid: bool
     subject: str
     body: str
+
+    def set_recipient(self, recipient: str) -> Iterable[Callable]:
+        self.recipient = recipient
+        if not self.find_message_recipients_is_open:
+            if recipient:
+                self.find_message_recipients_is_open = True
+        if self.find_message_recipients_is_open:
+            if not recipient:
+                self.find_message_recipients_is_open = False
 
     def retrieve_messages(self) -> Iterable[Callable]:
         """
