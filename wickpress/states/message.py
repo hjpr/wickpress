@@ -1,4 +1,5 @@
 
+import httpx
 import reflex as rx
 import time
 
@@ -34,28 +35,62 @@ class MessageState(UserState):
         "created_at" Message created timestamp
         "deleted_at": Message deleted timestamp
     """
+    is_loading_recipients: bool
+
     selected_filter: str = "All"
     messages: list[dict[str, dict[str, str]]]
     last_retrieved_unix_timestamp: int
     last_sent_message_unix_timestamp: int
     
+
     show_new_message_modal: bool = False
 
     recipient: str
-    recipient_list: list[str]
-    find_message_recipients_is_open: bool
+    no_recipient: str
+    recipients_available: list[dict[str, str]]
+    recipients_selected: list[dict[str, str]]
     recipient_valid: bool
     subject: str
     body: str
 
-    def set_recipient(self, recipient: str) -> Iterable[Callable]:
+    @rx.var
+    def recipient_popup_is_open(self) -> bool:
+        return True if (self.recipient or self.no_recipient) else False
+
+    def set_recipient(self, recipient:str) -> Iterable[Callable]:
         self.recipient = recipient
-        if not self.find_message_recipients_is_open:
-            if recipient:
-                self.find_message_recipients_is_open = True
-        if self.find_message_recipients_is_open:
-            if not recipient:
-                self.find_message_recipients_is_open = False
+        if len(recipient) > 0:
+            self.query_recipient(recipient)
+        else:
+            self.recipient = ""
+            self.no_recipient = ""
+            self.is_loading_recipients = False
+
+    def query_recipient(self, recipient: str) -> None:
+        # Fire off a search based on the user supplied recipient.
+        try:
+            valid_recipients = (
+                self.query()
+                .admin()
+                .table("profiles")
+                .select("*")
+                .ilike("handle", f"{recipient}%")
+                .limit(10)
+                .execute()
+            )
+            self.recipients_available = valid_recipients
+            # Prevents UI delay from showing a valid search as invalid for a brief second
+            if not valid_recipients:
+                self.no_recipient = self.recipient
+        except:
+            console.print_exception()
+        finally:
+            self.is_loading_recipients = False
+
+    def add_recipient(self, recipient: dict) -> None:
+        self.recipient = ""
+        self.recipients_selected.append(recipient)
+        console.print(f"Added {recipient}")
 
     def retrieve_messages(self) -> Iterable[Callable]:
         """
