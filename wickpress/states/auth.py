@@ -7,11 +7,12 @@ from rich.console import Console
 from typing import Callable, Iterable
 
 from .base import BaseState
-from .user import UserState
 
 console = Console()
 
 class AuthState(BaseState):
+
+    user: dict[str, dict[str, str]]
     
     def sign_in(self, form_data: dict) -> Iterable[Callable]:
         try:
@@ -40,7 +41,7 @@ class AuthState(BaseState):
             else:
                 user["wickpress"] = user["wickpress"][0]
 
-            yield UserState.setvar("user", user)
+            self.user = user
             yield rx.redirect("/home")
 
         except HTTPStatusError as e:

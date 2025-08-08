@@ -220,6 +220,7 @@ def new_message_modal() -> rx.Component:
                         type="button",
                         cursor="pointer",
                         size="2",
+                        on_click=MessageState.send_message
                     ),
                     rx.text("Compose"),
                     rx.button(
@@ -242,22 +243,33 @@ def new_message_modal() -> rx.Component:
                     z_index="10",
                 ),
                 rx.flex(
+                    # 'To' field embedded in popover trigger
                     rx.flex(
                         message_recipient_popover(),
                     ),
+                    rx.cond(
+                        MessageState.recipients_selected,
+                        rx.flex(
+                            rx.foreach(MessageState.recipients_selected, recipients_selected_render),
+                        ),
+                    ),
                     rx.flex(
                         rx.text_field(
+                            value=MessageState.subject,
                             placeholder="Subject",
                             border="1px solid var(--gray-3)",
                             box_shadow="none",
-                            width="100%"
+                            width="100%",
+                            on_change=MessageState.set_subject.debounce(300)
                         ),
                     ),
                     rx.flex(
                         rx.text_area(
+                            value=MessageState.body,
                             border="1px solid var(--gray-3)",
                             box_shadow="none",
-                            width="100%"
+                            width="100%",
+                            on_change=MessageState.set_body.debounce(300)
                         ),
                         flex_grow="1",
                         width="100%"
@@ -275,4 +287,26 @@ def new_message_modal() -> rx.Component:
             on_pointer_down_outside=MessageState.setvar("show_new_message_modal", False),
         ),
         open=MessageState.show_new_message_modal,
+    )
+
+def recipients_selected_render(recipient: dict) -> rx.Component:
+    # return rx.badge(f'@{recipient.get("handle")}')
+    return rx.flex(
+        rx.text(f"@{recipient.get('handle')}", size="2"),
+        rx.center(
+            rx.icon("x", size=14),
+            height="1.25rem",
+            width="1.25rem",
+            border_radius="calc(infinity * 1px)",
+            cursor="pointer",
+            _hover={
+                "bg": "var(--gray-4)"
+            },
+            on_click=MessageState.remove_recipient(recipient)
+        ),
+        align="center",
+        border="1px solid var(--gray-3)",
+        border_radius="calc(infinity * 1px)",
+        padding="0.25rem 0.5rem",
+        gap="0.5rem"
     )

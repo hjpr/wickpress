@@ -10,15 +10,15 @@ from ..states.user import UserState
 
 console = Console()
 
-MESSAGE_REFRESH_RATE = 20 # (Interval after which another refresh is allowed - seconds)
+MESSAGE_REFRESH_RATE = 10 # (Interval after which another refresh is allowed - seconds)
 MESSAGE_SEND_LIMIT_RATE = 10 # (Interval after which user can send another message - seconds)
 
 class MessageState(UserState):
 
     """
     Message structure:
-        "owner": Message created by uuid
-        "owner_handle": User
+        "sender": Message created by uuid
+        "sender_handle": User
         "recipient": Intended user's uuid
         "recipient_handle":
         "content": {
@@ -49,13 +49,12 @@ class MessageState(UserState):
     no_recipient: str
     recipients_available: list[dict[str, str]]
     recipients_selected: list[dict[str, str]]
-    recipient_valid: bool
     subject: str
     body: str
 
     @rx.var
     def recipient_popup_is_open(self) -> bool:
-        return True if (self.recipient or self.no_recipient) else False
+        return True if self.recipient else False
 
     def set_recipient(self, recipient:str) -> Iterable[Callable]:
         self.recipient = recipient
@@ -87,10 +86,17 @@ class MessageState(UserState):
         finally:
             self.is_loading_recipients = False
 
-    def add_recipient(self, recipient: dict) -> None:
+    def add_recipient(self, recipient_to_add: dict) -> None:
         self.recipient = ""
-        self.recipients_selected.append(recipient)
-        console.print(f"Added {recipient}")
+        if recipient_to_add not in self.recipients_selected:
+            self.recipients_selected.append(recipient_to_add)
+
+    def remove_recipient(self, recipient_to_remove: dict) -> None:
+        new_recipient_list = []
+        for recipient in self.recipients_selected:
+            if recipient["handle"] != recipient_to_remove["handle"]:
+                new_recipient_list.append(recipient)
+        self.recipients_selected = new_recipient_list
 
     def retrieve_messages(self) -> Iterable[Callable]:
         """
@@ -126,54 +132,47 @@ class MessageState(UserState):
             yield rx.toast.error("Issue loading messages")
             yield MessageState.setvar("is_loading", False)
 
-    def send_message(self, form_data: dict) -> Iterable[Callable]:
+    def send_message(self) -> Iterable[Callable]:
         """
         Sends a message to a user.
         """
-        yield MessageState.setvar("is_loading", True)
-        recipient_handle = form_data.get("recipient")
+        self.is_loading = True
         content = {
-            "subject": form_data.get("subject"),
-            "body": form_data.get("body")
+            "subject": self.subject,
+            "body": self.body
         }
         try:
             # Check if all content is present
-            if not recipient_handle:
-                return rx.toast.error("Must specify a user to send message to.")
+            if not self.recipients_selected:
+                return rx.toast.error("Must specify user(s) to send message to.")
             if not content.get("subject"):
                 return rx.toast.error("Must include a subject line.")
             if not content.get("body"):
                 return rx.toast.error("Must contain a message body.")
-            
-            # Check if recipient is valid by checking if there's a handle that matches
-            recipient_valid = (
-                self.query()
-                .admin()
-                .table("profiles")
-                .select("*")
-                .eq("handle", recipient_handle)
-                .execute()
-            )
-            if not recipient_valid[0]:
-                return rx.toast.error(f"{recipient_valid[0]} either doesn't exist, or doesn't accept direct messages.")
 
             # Upload message to the database.
-            (
-                self.query()
-                .table("messages")
-                .insert(
-                    {
-                        "owner": self.user["wickpress"]["id"],
-                        "owner_handle": self.user["wickpress"]["handle"],
-                        "recipient_handle": recipient_handle,
-                        "content": content
-                    }
+            for recipient in self.recipients_selected:
+                (
+                    self.query()
+                    .table("messages")
+                    .insert(
+                        {
+                            "sender": self.user["wickpress"]["id"],
+                            "sender_handle": self.user["wickpress"]["handle"],
+                            "recipient_handle": recipient["handle"],
+                            "content": content
+                        }
+                    )
+                    .execute()
                 )
-                .execute()
-            )
-            yield rx.toast.info("Sent message successfully.")
+            yield rx.toast.info(f"Sent successfully.")
         except:
             console.print_exception()
             yield rx.toast.error("Issue sending message")
         finally:
-            yield MessageState.setvar("is_loading", False)
+            self.recipient = ""
+            self.recipients_selected = []
+            self.subject = ""
+            self.body = ""
+            self.show_new_message_modal = False
+            self.is_loading = False

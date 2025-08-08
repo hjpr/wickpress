@@ -241,18 +241,17 @@ def messages_content() -> rx.Component:
                         slim_message
                     ),
                     rx.flex(
-                        rx.flex(
-                            rx.icon("mail-open", color="var(--gray-9)"),
-                            rx.text("No messages"),
-                            flex_direction="column",
-                            gap="0.5rem",
-                            align="center",
-                            padding="4rem"
+                        rx.center(
+                            rx.text(
+                                f'No messages in "{MessageState.selected_filter}"',
+                                size="2",
+                                color="var(--gray-6)"
+                            ),
                         ),
                         flex_direction="row",
                         justify="center",
                         border_top="1px solid var(--gray-3)",
-                        border_bottom="1px solid var(--gray-3)",
+                        padding="8rem"
                     )
                 ),
                 flex_direction="column",

@@ -1,9 +1,9 @@
 
 import reflex as rx
 
-from .base import BaseState
+from .auth import AuthState
 
-class UserState(BaseState):
+class UserState(AuthState):
     """
     User object structure:
     {
@@ -38,7 +38,6 @@ class UserState(BaseState):
             'updated_at': Last update timestamp
     }
     """
-    user: dict[str, dict[str, str]]
 
     @rx.var
     def user_opt_in_social(self) -> bool:

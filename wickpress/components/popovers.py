@@ -22,8 +22,8 @@ def message_recipient_popover() -> rx.Component:
                     border="1px solid var(--gray-3)",
                     box_shadow="none",
                     width="100%",
-                    on_key_down=MessageState.set_is_loading_recipients(True).throttle(200),
-                    on_change=MessageState.set_recipient.debounce(200),
+                    on_key_down=MessageState.set_is_loading_recipients(True).throttle(100),
+                    on_change=MessageState.set_recipient.debounce(100),
                 ),
                 width="100%"
             )
@@ -43,7 +43,7 @@ def message_recipient_popover() -> rx.Component:
                 ),
                 width="100%"
             ),
-            on_open_auto_focus=rx.prevent_default
+            on_open_auto_focus=rx.prevent_default,
         ),
         open=MessageState.recipient_popup_is_open,
     )
