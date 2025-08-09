@@ -25,7 +25,14 @@ class PageState(BaseState):
 
     @rx.var
     def current_page(self) -> str:
-        return self.router.url.path
+        """
+        Separate the url at the "/" so that the base url root can be extracted.
+        URL format for the site is e.g. /main-section-name/branch/another-branch/[parameter].
+        We're using the main-section-name as the header for our navbar.
+        """
+        page = self.router.url.path
+        page_root = page.split("/")
+        return page_root[1] if len(page_root) > 1 else page_root[0]
 
     @rx.var
     def current_page_formatted(self) -> str:
@@ -33,7 +40,7 @@ class PageState(BaseState):
         Returns the current page in a formatted way, if needed.
         This can be expanded to include more complex formatting logic.
         """
-        return self.current_page.replace("/", "").capitalize()
+        return self.current_page.capitalize()
     
     @rx.var
     def search_results_not_ready(self) -> bool:

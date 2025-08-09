@@ -208,6 +208,7 @@ def new_message_modal() -> rx.Component:
         rx.dialog.trigger(
             rx.button(
                 rx.icon("pencil", size=18),
+                size="3",
                 cursor="pointer",
                 on_click=MessageState.setvar("show_new_message_modal", True)
             )

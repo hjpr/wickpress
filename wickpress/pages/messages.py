@@ -78,6 +78,7 @@ def nav_panel_messages(
             rx.flex(
                 rx.button(
                     rx.icon("ellipsis-vertical", size=18),
+                    size="3",
                     variant="soft"
                 ),
                 bg="var(--grey-3)",

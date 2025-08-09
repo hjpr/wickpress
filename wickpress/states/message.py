@@ -14,27 +14,6 @@ MESSAGE_REFRESH_RATE = 10 # (Interval after which another refresh is allowed - s
 MESSAGE_SEND_LIMIT_RATE = 10 # (Interval after which user can send another message - seconds)
 
 class MessageState(UserState):
-
-    """
-    Message structure:
-        "sender": Message created by uuid
-        "sender_handle": User
-        "recipient": Intended user's uuid
-        "recipient_handle":
-        "content": {
-            "subject": Message subject,
-            "body": Message body,
-            "style": Prebuilt message style designator
-        },
-        "tags": {
-            "read": bool,
-            "unread": bool,
-            "starred": bool,
-            "trash": bool
-        },
-        "created_at" Message created timestamp
-        "deleted_at": Message deleted timestamp
-    """
     is_loading_recipients: bool
 
     selected_filter: str = "All"
