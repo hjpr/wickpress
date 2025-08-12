@@ -286,14 +286,14 @@ def navbar_side() -> rx.Component:
                         "backgroundColor": "var(--gray-3)"
                     },
                 ),
-                # Messages button
+                # Chat button
                 rx.cond(
                     AuthState.user_is_authenticated,
                     rx.flex(
                         rx.tooltip(
                             rx.flex(
                                 rx.icon(
-                                    "mail",
+                                    "message-square",
                                     color="var(--gray-10)",
                                 ),
                                 align="center",

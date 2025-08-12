@@ -1,4 +1,5 @@
 from .buttons import *
+from .chat import *
 from .flex import *
 from .menus import *
 from .modals import *

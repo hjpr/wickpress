@@ -1,11 +1,11 @@
 
 import reflex as rx
 
-from ..components.mail import slim_message
+from ..components.chat import slim_message
 from ..components.modals import new_message_modal
 from ..components.nav_bars import navbar, navbar_side
 from ..components.protected import login_protected
-from ..states.message import MessageState
+from ..states.chat import ChatState
 from ..states.page import PageState
 
 messages_filters: list[str] = [
@@ -20,7 +20,7 @@ messages_filters: list[str] = [
 @rx.page(
     route="/messages",
     title="Messages - Wick Press",
-    on_load=MessageState.retrieve_messages
+    on_load=ChatState.load_chats
 )
 @login_protected
 def messages() -> rx.Component:
@@ -39,7 +39,7 @@ def messages() -> rx.Component:
                 # Main content area, centered and width-limited
                 rx.flex(
                     nav_panel_messages(
-                        messages_content(),
+                        chat_content(),
                         messages_filters,
                         overflow=False,
                         sticky=True
@@ -74,7 +74,7 @@ def nav_panel_messages(
             rx.flex(
                 new_message_modal()
             ),
-            rx.flex(rx.heading(MessageState.selected_filter)),
+            rx.flex(rx.heading(ChatState.selected_filter)),
             rx.flex(
                 rx.button(
                     rx.icon("ellipsis-vertical", size=18),
@@ -202,32 +202,25 @@ def filter_element(filter: str) -> rx.Component:
             size="2",
             user_select="none",
             class_name=rx.cond(
-                MessageState.selected_filter == filter,
+                ChatState.selected_filter == filter,
                 "ring-3 ring-[var(--gray-6)]",
                 ""
             ),
             on_click=[
-                MessageState.setvar("selected_filter", filter),  # Update selected filter state
+                ChatState.setvar("selected_filter", filter),  # Update selected filter state
                 rx.scroll_to(elem_id="messages-content")  # Scroll to messages content
             ]
         ),
         cursor="pointer"
     )
 
-def messages_content() -> rx.Component:
+def chat_content() -> rx.Component:
     return rx.flex(
         rx.cond(
             # If loading, show skeletons
-            MessageState.is_loading,
+            ChatState.is_loading,
             rx.flex(
-                mockup_element_post(),
-                mockup_element_post(),
-                mockup_element_post(),
-                mockup_element_post(),
-                mockup_element_post(),
-                mockup_element_post(),
-                mockup_element_post(),
-                mockup_element_post(),
+                rx.spinner(),
                 flex_direction="column",
                 flex_grow="1",
                 class_name="divide-y divide-[var(--gray-3)]",
@@ -236,15 +229,15 @@ def messages_content() -> rx.Component:
             # If there are messages, display, otherwise empty icon
             rx.flex(
                 rx.cond(
-                    MessageState.messages,
+                    ChatState.chats,
                     rx.foreach(
-                        MessageState.messages,
+                        ChatState.chats,
                         slim_message
                     ),
                     rx.flex(
                         rx.center(
                             rx.text(
-                                f'No messages in "{MessageState.selected_filter}"',
+                                f'No messages in "{ChatState.selected_filter}"',
                                 size="2",
                                 color="var(--gray-6)"
                             ),
@@ -262,34 +255,4 @@ def messages_content() -> rx.Component:
         ),
         flex_direction="column",
         flex_grow="1",
-    )
-
-def mockup_element_post() -> rx.Component:
-    return rx.flex(
-        # Profile picture container
-        rx.flex(
-            rx.skeleton(
-                height="3rem",
-                width="3rem",
-                border_radius="full",
-            ),
-            flex_direction="column",
-            justify="start",
-        ),
-        # Element content container
-        rx.flex(
-            rx.skeleton(
-                height="1.5rem",
-            ),
-            rx.skeleton(
-                height="1.5rem",
-            ),
-            flex_direction="column",
-            flex_grow="1",
-            gap="1rem",
-            padding="0 1rem"
-        ),
-        flex_direction="row",
-        flex_grow="1",
-        padding="1.25rem 1rem",
     )

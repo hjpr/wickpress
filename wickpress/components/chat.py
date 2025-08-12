@@ -1,7 +1,9 @@
 
 import reflex as rx
+
+from ..classes.chat import ChatLimited
     
-def slim_message(message: dict[str, str]) -> rx.Component:
+def slim_message(chat: ChatLimited) -> rx.Component:
     return rx.flex(
         # Profile picture container
         rx.flex(
@@ -17,7 +19,7 @@ def slim_message(message: dict[str, str]) -> rx.Component:
         rx.flex(
             rx.flex(
                 rx.text(
-                    message["content"]["subject"]
+                    chat.chat_id
                 ),
                 height="1rem"
             ),
@@ -37,7 +39,8 @@ def slim_message(message: dict[str, str]) -> rx.Component:
         flex_direction="row",
         justify="center",
         gap="1rem",
-        padding="1rem"
+        padding="1rem",
+        on_click=rx.redirect(f"/messages/view/{chat['chat_id']}")
     )
 
 def expanded_message(message: dict[str, str]) -> rx.Component:

@@ -1,8 +1,8 @@
 
 import reflex as rx
 
-from .popovers import message_recipient_popover
-from ..states.message import MessageState
+from .popovers import message_participant_popover
+from ..states.chat import ChatState
 from ..states.page import PageState
 
 def search_modal_for_navbar() -> rx.Component:
@@ -209,8 +209,7 @@ def new_message_modal() -> rx.Component:
             rx.button(
                 rx.icon("pencil", size=18),
                 size="3",
-                cursor="pointer",
-                on_click=MessageState.setvar("show_new_message_modal", True)
+                cursor="pointer"
             )
         ),
         rx.dialog.content(
@@ -220,8 +219,7 @@ def new_message_modal() -> rx.Component:
                         rx.icon("send", size=18),
                         type="button",
                         cursor="pointer",
-                        size="2",
-                        on_click=MessageState.send_message
+                        size="2"
                     ),
                     rx.text("Compose"),
                     rx.button(
@@ -229,8 +227,7 @@ def new_message_modal() -> rx.Component:
                         type="button",
                         cursor="pointer",
                         size="2",
-                        variant="soft",
-                        on_click=MessageState.setvar("show_new_message_modal", False),
+                        variant="soft"
                     ),
                     align="center",
                     justify="between",
@@ -246,31 +243,29 @@ def new_message_modal() -> rx.Component:
                 rx.flex(
                     # 'To' field embedded in popover trigger
                     rx.flex(
-                        message_recipient_popover(),
+                        message_participant_popover(),
                     ),
                     rx.cond(
-                        MessageState.recipients_selected,
+                        ChatState
+                    .participants_selected,
                         rx.flex(
-                            rx.foreach(MessageState.recipients_selected, recipients_selected_render),
+                            rx.foreach(ChatState
+                        .participants_selected, participants_selected_render),
                         ),
                     ),
                     rx.flex(
                         rx.text_field(
-                            value=MessageState.subject,
                             placeholder="Subject",
                             border="1px solid var(--gray-3)",
                             box_shadow="none",
-                            width="100%",
-                            on_change=MessageState.set_subject.debounce(300)
+                            width="100%"
                         ),
                     ),
                     rx.flex(
                         rx.text_area(
-                            value=MessageState.body,
                             border="1px solid var(--gray-3)",
                             box_shadow="none",
-                            width="100%",
-                            on_change=MessageState.set_body.debounce(300)
+                            width="100%"
                         ),
                         flex_grow="1",
                         width="100%"
@@ -285,15 +280,13 @@ def new_message_modal() -> rx.Component:
                 height="36rem",
             ),
             padding="0 0 0 0",
-            on_pointer_down_outside=MessageState.setvar("show_new_message_modal", False),
         ),
-        open=MessageState.show_new_message_modal,
     )
 
-def recipients_selected_render(recipient: dict) -> rx.Component:
-    # return rx.badge(f'@{recipient.get("handle")}')
+def participants_selected_render(participant: dict) -> rx.Component:
+    # return rx.badge(f'@{participant.get("handle")}')
     return rx.flex(
-        rx.text(f"@{recipient.get('handle')}", size="2"),
+        rx.text(f"@{participant.get('handle')}", size="2"),
         rx.center(
             rx.icon("x", size=14),
             height="1.25rem",
@@ -303,7 +296,6 @@ def recipients_selected_render(recipient: dict) -> rx.Component:
             _hover={
                 "bg": "var(--gray-4)"
             },
-            on_click=MessageState.remove_recipient(recipient)
         ),
         align="center",
         border="1px solid var(--gray-3)",

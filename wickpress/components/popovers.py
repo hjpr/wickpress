@@ -1,42 +1,42 @@
 
 import reflex as rx
 
-from ..states.message import MessageState
+from ..states.chat import ChatState
 
-def message_recipient_popover() -> rx.Component:
+def message_participant_popover() -> rx.Component:
     return rx.popover.root(
         rx.popover.trigger(
             rx.flex(
                 rx.text_field(
                     rx.text_field.slot(
                         rx.cond(
-                            MessageState.is_loading_recipients,
+                            ChatState.loading_participants,
                             rx.spinner()
                         ),
                         side="right"
                     ),
-                    value=MessageState.recipient,
-                    id="recipient",
+                    value=ChatState.participant,
+                    id="participant",
                     placeholder="To",
                     max_length=30,
                     border="1px solid var(--gray-3)",
                     box_shadow="none",
                     width="100%",
-                    on_key_down=MessageState.set_is_loading_recipients(True).throttle(100),
-                    on_change=MessageState.set_recipient.debounce(100),
+                    on_key_down=ChatState.set_loading_participants(True).throttle(100),
+                    on_change=ChatState.set_participant.debounce(100),
                 ),
                 width="100%"
             )
         ),
         rx.popover.content(
             rx.flex(
-                # If recipients available, list retrieved handles
+                # If participants available, list retrieved handles
                 rx.cond(
-                    MessageState.recipients_available,
-                    rx.foreach(MessageState.recipients_available, render_recipient),
+                    ChatState.participants_available,
+                    rx.foreach(ChatState.participants_available, render_participant),
                     rx.center(
                         rx.text(
-                            f'No results for "@{MessageState.no_recipient}"',
+                            f'No results for "@{ChatState.no_participants}"',
                             size="2"
                         )
                     )
@@ -45,18 +45,17 @@ def message_recipient_popover() -> rx.Component:
             ),
             on_open_auto_focus=rx.prevent_default,
         ),
-        open=MessageState.recipient_popup_is_open,
+        open=ChatState.participant_popup_open,
     )
 
-def render_recipient(recipient: dict) -> rx.Component:
+def render_participant(participant: dict) -> rx.Component:
     return rx.card(
         rx.flex(
-            rx.text(f"@{recipient.get("handle")}"),
+            rx.text(f"@{participant.get("handle")}"),
             rx.icon("ghost"),
             justify_content="space-between",
             gap="0.5rem"
         ),
         cursor="pointer",
-        width="100%",
-        on_click=MessageState.add_recipient(recipient)
+        width="100%"
     )

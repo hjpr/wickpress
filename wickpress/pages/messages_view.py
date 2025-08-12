@@ -1,11 +1,11 @@
 
 import reflex as rx
 
-from ..components.mail import slim_message
+from ..components.chat import slim_message
 from ..components.modals import new_message_modal
 from ..components.nav_bars import navbar, navbar_side
 from ..components.protected import login_protected
-from ..states.message import MessageState
+from ..states.chat import ChatState
 from ..states.page import PageState
 
 
