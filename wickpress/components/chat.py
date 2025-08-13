@@ -18,9 +18,7 @@ def slim_message(chat: ChatLimited) -> rx.Component:
         # Content container
         rx.flex(
             rx.flex(
-                rx.text(
-                    chat.chat_id
-                ),
+                rx.text(chat.chat_id),
                 height="1rem"
             ),
             rx.flex(
@@ -39,7 +37,12 @@ def slim_message(chat: ChatLimited) -> rx.Component:
         flex_direction="row",
         justify="center",
         gap="1rem",
+        border_radius="0.75rem",
         padding="1rem",
+        cursor="pointer",
+        _hover={
+            "bg":"var(--gray-3)",
+        },
         on_click=rx.redirect(f"/messages/view/{chat['chat_id']}")
     )
 

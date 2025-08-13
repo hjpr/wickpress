@@ -1,13 +1,15 @@
 
 import reflex as rx
 import hashlib
+import json
 import time
 
 from datetime import datetime, timezone
 from rich.console import Console
-from typing import Callable, Iterable
+from typing import Any, Callable, Iterable
 
 from ..classes.chat import ChatLimited
+from ..states.page import PageState
 from .user import UserState
 
 console = Console()
@@ -17,7 +19,7 @@ CHAT_SEND_LIMIT_RATE = 5 # (Interval after which user can send another message -
 
 class ChatState(UserState):
 
-    loading_chats: bool
+    loading_all_chats: bool
     loading_participants: bool
     new_chat_modal_open: bool
 
@@ -70,7 +72,7 @@ class ChatState(UserState):
         finally:
             self.loading_participants = False
 
-    def load_chats(self) -> None:
+    def load_all_chats(self) -> None:
         """
         Pull chats down where user is participant.
         Load chats as ChatLimited classes.
@@ -97,31 +99,121 @@ class ChatState(UserState):
         except Exception as e: 
             console.print_exception()
         finally:
-            self.loading_chats = False
+            self.loading_all_chats = False
 
 class ViewChatState(ChatState):
+    # Helper vars
+    CHAT_TIMEOUT_INTERVAL_SEC = 5
+    loading_single_chat: bool
+
+    # Cache to save previously viewed chats
+    chat_cache: dict[str, dict[str, Any]]
+
+    # Vars stored for a single chat.
     chat_id: str
-    chat_details: str
+    chat_details: dict
     owner: str
-    created_at: datetime
+    created_at: str
     permissions: dict[str, bool]
-    participant_ids: list[str]
-    moderator_ids: list[str]
-    messages: list[dict[str, str]]
+    participant_ids: list[str] | None
+    moderator_ids: list[str] | None
+    messages: list[dict[str, str]] | None
+    hash: str | None
+
+    # Vars for submitting message to chat.
     chat_content: str
     last_submitted_message: int
 
-    CHAT_TIMEOUT_INTERVAL_SEC = 5
+    @staticmethod
+    def create_hash(data_to_hash: dict) -> str:
+        """
+        Return a str of hexadecimal digits based on sha256 hasher.
+        """
+        serialized_data = json.dumps(
+            data_to_hash,
+            sort_keys=True
+        ).encode("utf-8")
 
-    def load_messages(self) -> None:
-        messages = (
-            self.query()
-            .table("chats")
-            .select("*")
-            .eq("chat_id", self.chat_id)
-            .execute()
-        )
-        self.messages = messages
+        hasher = hashlib.sha256()
+        hasher.update(serialized_data)
+
+        return hasher.hexdigest()
+
+    def load_single_chat(self) -> Callable | None:
+        self.loading_single_chat = True
+
+        # If url param is empty, go back
+        chat_id_from_url = self.router_data["query"]["chat_id_from_url"]
+        if not chat_id_from_url:
+            return rx.call_script(
+                "history.back()",
+                callback=PageState.default_script_callback
+            )
+        
+        # Check if chat was previously loaded and up to date
+        if chat_id_from_url in self.chat_cache:
+
+            # Pull down hash from db and compare hash to cache
+            cached_chat_hash = self.chat_cache[chat_id_from_url]["hash"]
+            db_chat_hash = (
+                self.query()
+                .table("chats")
+                .select("hash")
+                .eq("chat_id", chat_id_from_url)
+                .execute()[0]["hash"]
+            )
+            console.print(f"Comparing cached hash - {cached_chat_hash}")
+            console.print(f"...to db hash - {db_chat_hash}")
+            # Set cached chat to state instead of making db call if current with db
+            if cached_chat_hash == db_chat_hash:
+                chat: dict = self.chat_cache[chat_id_from_url]
+                self.chat_id = chat["chat_id"]
+                self.chat_details = chat["chat_details"]
+                self.owner = chat["owner"]
+                self.created_at = chat["created_at"]
+                self.permissions = chat["permissions"]
+                self.participant_ids = chat["participant_ids"]
+                self.moderator_ids = chat["moderator_ids"]
+                self.messages = chat["messages"]
+                self.hash = chat["hash"]
+                console.print(
+                    f"Loaded {chat_id_from_url} from cache for {self.user["wickpress"]["handle"]}"
+                )
+
+                # Abort load from db
+                return
+
+        try:
+            # Pull full object from database
+            chat = (
+                self.query()
+                .table("chats")
+                .select("*")
+                .eq("chat_id", chat_id_from_url)
+                .execute()
+                [0]
+            )
+
+            # Load object into state
+            self.chat_id = chat["chat_id"]
+            self.chat_details = chat["chat_details"]
+            self.owner = chat["owner"]
+            self.created_at = chat["created_at"]
+            self.permissions = chat["permissions"]
+            self.participant_ids = chat["participant_ids"]
+            self.moderator_ids = chat["moderator_ids"]
+            self.messages = chat["messages"]
+
+            # Save object under it's own chat_id
+            self.chat_cache[chat["chat_id"]] = chat
+            console.print(
+                f"Loaded {chat_id_from_url} from database for {self.user["wickpress"]["handle"]}"
+            )
+
+        except Exception as e:
+            console.print(str(e))
+        finally:
+            self.loading_single_chat = False
 
     def send_message(self) -> None:
         content = self.chat_content

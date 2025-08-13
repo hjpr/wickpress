@@ -5,7 +5,7 @@ from ..components.chat import slim_message
 from ..components.modals import new_message_modal
 from ..components.nav_bars import navbar, navbar_side
 from ..components.protected import login_protected
-from ..states.chat import ChatState
+from ..states.chat import ChatState, ViewChatState
 from ..states.page import PageState
 
 
@@ -13,8 +13,9 @@ sample_user_message = "Hey, whats up. I heard you farted while you were eating."
 sample_participant_message = "ya lol, its nbd. i call it a beef queef." 
 
 @rx.page(
-    route="/messages/view/[message_id]",
-    title="Messages - Wick Press"
+    route="/messages/view/[chat_id_from_url]",
+    title="Messages - Wick Press",
+    on_load=ViewChatState.load_single_chat
 )
 @login_protected
 def view() -> rx.Component:

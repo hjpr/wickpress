@@ -20,7 +20,7 @@ messages_filters: list[str] = [
 @rx.page(
     route="/messages",
     title="Messages - Wick Press",
-    on_load=ChatState.load_chats
+    on_load=ChatState.load_all_chats
 )
 @login_protected
 def messages() -> rx.Component:
