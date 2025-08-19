@@ -36,6 +36,7 @@ class AuthState(BaseState):
                 .execute()
             )
 
+            # Build default user data and create database entry if user not present
             if not user["wickpress"]:
                 self.query().table("profiles").insert({"id": user["supabase"]["id"]}).execute()
             else:

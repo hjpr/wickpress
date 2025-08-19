@@ -2,8 +2,9 @@
 import reflex as rx
 
 from .base import BaseState
+from reflex.event import EventSpec
 from rich.console import Console
-from typing import Callable, Iterable
+from typing import Generator
 
 console = Console()
 
@@ -50,7 +51,7 @@ class PageState(BaseState):
         """
         return True if self.search_input and not self.search_results else False
     
-    def submit_search_from_navbar(self, form_data: dict) -> Iterable[Callable]:
+    def submit_search_from_navbar(self, form_data: dict) -> Generator[EventSpec]:
         """
         Handles the search submission from the navbar.
         This method can be expanded to include actual search logic.
@@ -61,8 +62,9 @@ class PageState(BaseState):
         console.print(f"Search submitted: {search_input}")
         yield PageState.setvar("is_loading", False)
 
-    def default_script_callback(self, callback: any) -> Iterable[Callable]:
+    def default_script_callback(self) -> None:
         """
         Default script callback for handling script calls with no callback.
         Suppresses logging [Reflex Frontend Exception] errors.
         """
+        return None

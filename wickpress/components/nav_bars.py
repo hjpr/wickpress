@@ -25,11 +25,11 @@ def navbar() -> rx.Component:
                 border_right=rx.cond(
                     PageState.current_page == "/about",
                     "none",
-                    "1px solid var(--gray-3)",
+                    "1px solid var(--gray-4)",
                 ),
                 border_bottom=rx.cond(
                     PageState.current_page == "/about",
-                    "1px solid var(--gray-3)",
+                    "1px solid var(--gray-4)",
                     "none"
                 ),
                 display=rx.breakpoints(
@@ -147,7 +147,7 @@ def navbar() -> rx.Component:
             flex_direction="column",
             width="100%"
         ),
-        bg="var(--gray-1)",
+        bg="var(--gray-2)",
         height="4.5rem",
         position="fixed",
         width="100%",
@@ -356,8 +356,8 @@ def navbar_side() -> rx.Component:
             width="100%",
             overflow="hidden",
         ),
-        background_color="var(--gray-1)",
-        border_right="1px solid var(--gray-3)",
+        background_color="var(--gray-2)",
+        border_right="1px solid var(--gray-4)",
         height="100%",
         width="4.5rem",
         padding="4.5rem 0 0 0",

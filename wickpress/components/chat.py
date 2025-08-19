@@ -1,9 +1,9 @@
 
 import reflex as rx
 
-from ..classes.chat import ChatLimited
+from ..classes.chat import ChatPartial
     
-def slim_message(chat: ChatLimited) -> rx.Component:
+def slim_message(chat: ChatPartial) -> rx.Component:
     return rx.flex(
         # Profile picture container
         rx.flex(
