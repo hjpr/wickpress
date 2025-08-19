@@ -1,18 +1,15 @@
 
-from statistics import variance
 import reflex as rx
 
-from ..components.chat import slim_message
-from ..components.modals import new_message_modal
 from ..components.nav_bars import navbar, navbar_side
 from ..components.protected import login_protected
-from ..states.chat import ChatState, ViewChatState
+from ..states.chat import ViewChatState
 
 
 @rx.page(
     route="/messages/view/[chat_id_from_url]",
     title="Messages - Wick Press",
-    on_load=ViewChatState.load_single_chat # type: ignore
+    on_load=ViewChatState.load_single_chat
 )
 @login_protected
 def view() -> rx.Component:
@@ -55,7 +52,7 @@ def message_pane() -> rx.Component:
             rx.flex(
                 rx.flex(
                     rx.heading(
-                        "Fantasy Island Romance Throuple Episodic Content Chat ",
+                        ViewChatState.current_chat.chat_details["name"],
                         size="4",
                         text_overflow="ellipsis",
                         overflow="hidden",
@@ -83,7 +80,7 @@ def message_pane() -> rx.Component:
                         )
                     ),
                     flex_grow="1",
-                    padding="1rem 1rem 0.5rem 1rem",
+                    padding="1rem 1rem 0.5rem 0rem",
                     width="100%",
                     height="0rem",
                 ),
@@ -158,6 +155,11 @@ def render_message(message: dict) -> rx.Component:
                 ),
                 flex_direction="column",
                 width="100%",
+                border_radius="0 0.5rem 0.5rem 0",
+                padding="0 0 0 1rem",
+                _hover={
+                    "bg": "var(--gray-3)"
+                }
             )
         ),
         rx.hover_card.content(
@@ -196,7 +198,6 @@ def render_message(message: dict) -> rx.Component:
                 )
             ),
             display="flex",
-            bg="none",
             size="1",
             side="top",
             align="end",
@@ -205,5 +206,8 @@ def render_message(message: dict) -> rx.Component:
             box_shadow="none",
             outline="none",
             gap="0.5rem",
-        )
+            padding="0.5rem"
+        ),
+        open_delay=0,
+        close_delay=0
     )

@@ -49,5 +49,7 @@ class ChatPartial(rx.Base):
     chat_id: str
     chat_details: dict
     owner: str
+    owner_handle: str
     participant_ids: list[str]
+    num_participants: int
     hash: str

@@ -187,7 +187,7 @@ def nav_panel_discover(
             md="4.5rem 0 0 4.5rem", 
             lg="4.5rem 0 0 4.5rem", 
             xl="4.5rem 0 0 4.5rem" 
-        )
+        ),
     )
 
 def filter_element(filter: str) -> rx.Component:

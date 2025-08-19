@@ -7,5 +7,5 @@ requires-python = ">=3.12"
 dependencies = [
     "loguru>=0.7.3",
     "reflex>=0.8.5",
-    "suplex>=0.2.5",
+    "suplex>=0.2.6",
 ]

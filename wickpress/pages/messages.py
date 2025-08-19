@@ -1,4 +1,5 @@
 
+from turtle import width
 import reflex as rx
 
 from ..components.chat import slim_message
@@ -69,28 +70,6 @@ def nav_panel_messages(
         ) -> rx.Component:
     return rx.flex(
 
-        # Buttons for create, etc.
-        rx.flex(
-            rx.flex(
-                new_message_modal()
-            ),
-            rx.flex(rx.heading(ChatState.selected_filter)),
-            rx.flex(
-                rx.button(
-                    rx.icon("ellipsis-vertical", size=18),
-                    size="3",
-                    variant="soft"
-                ),
-                bg="var(--grey-3)",
-                gap="0rem",
-                flex_direction="row",
-            ),
-            justify_content="space-between",
-            padding="1rem",
-            max_width="36rem",
-            width="100%"
-        ),
-
         rx.cond(
             overflow,
             # Horizontally scrolling container for filters that overflow
@@ -155,17 +134,20 @@ def nav_panel_messages(
                     gap="1rem",
                     height="3rem",
                     align="center",
-                    justify="start",
+                    justify="center",
                     padding_left="0.25rem",
                     overflow_x="scroll",
                     scrollbar_width="none"
                 ),
                 bg="var(--gray-1)",
-                border_top="1px solid var(--gray-3)",
                 flex_direction="row",
                 position="sticky" if sticky else "relative",
                 top="4.5rem" if sticky else "0",
                 padding="0rem 1rem",
+                border_bottom=rx.breakpoints(
+                    xs="1px solid var(--gray-3)",  # For small screens
+                    sm="none",
+                ),
                 max_width="36rem",
                 width="100%",
             ),
@@ -173,6 +155,27 @@ def nav_panel_messages(
 
         # Main content area
         rx.flex(
+            rx.flex(
+                rx.heading(ChatState.selected_filter),
+                rx.flex(
+                    rx.button(
+                        rx.icon("plus", size=16),
+                        variant="soft",
+                        cursor="pointer"
+                    ),
+                    rx.button(
+                        rx.icon("ellipsis", size=16),
+                        variant="soft",
+                        cursor="pointer"
+                    ),
+                    gap="0.5rem"
+                ),
+                bg="var(--gray-1)",
+                padding="1.5rem 1rem",
+                top="4.5rem",
+                justify_content="space-between",
+                user_select="none",
+            ),
             content,
             id="messages-content",
             flex_direction="column",

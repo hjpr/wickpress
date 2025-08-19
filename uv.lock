@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.12"
 
 [[package]]
@@ -617,7 +617,7 @@ wheels = [
 
 [[package]]
 name = "suplex"
-version = "0.2.5"
+version = "0.2.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dotenv" },
@@ -626,9 +626,9 @@ dependencies = [
     { name = "reflex" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/29/e2/4a378ec659f41baea1579123db411f84befeef1d1dc31ad2b3ba2f0712bd/suplex-0.2.5.tar.gz", hash = "sha256:e34cf0c62699b1da2d2cf206ae850fbb3753dae5f962e573417fdaa0468fb731", size = 15859, upload-time = "2025-07-21T19:53:49.639Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/51/15/2ce3603d743e855321fe44b1be1a770aaeaa57b387c1dd846c2a6b3aae67/suplex-0.2.6.tar.gz", hash = "sha256:2e0ba5155e5d061434f4bc2b6da9d78f049c4fb8203010a1afe7bde22a2f7fc1", size = 15908, upload-time = "2025-08-19T18:35:27.661Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ef/2d/3cdfefa371f62ab774674bb853ef35af3acd78256461b29666c68f4d6ed5/suplex-0.2.5-py3-none-any.whl", hash = "sha256:0dd0aa4b5b6d8b34c508f1425f180939b01b77202a7e1db9ffe5eb68bf04ea35", size = 16480, upload-time = "2025-07-21T19:53:48.382Z" },
+    { url = "https://files.pythonhosted.org/packages/51/d4/1984bf30846f0c785a775b7bad1c43e16702e16bc7a35363b0d56462756b/suplex-0.2.6-py3-none-any.whl", hash = "sha256:2ed0f9d88a4ac3692ff34c72ad543677360872d0d767993fe93db0f50683075a", size = 16545, upload-time = "2025-08-19T18:35:26.773Z" },
 ]
 
 [[package]]
@@ -733,7 +733,7 @@ dependencies = [
 requires-dist = [
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "reflex", specifier = ">=0.8.5" },
-    { name = "suplex", specifier = ">=0.2.5" },
+    { name = "suplex", specifier = ">=0.2.6" },
 ]
 
 [[package]]

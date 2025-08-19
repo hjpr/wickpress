@@ -83,7 +83,7 @@ class ChatState(UserState):
             participant_chats = (
                 self.query()
                 .table("chats")
-                .select("chat_id,chat_details,owner,participant_ids,hash")
+                .select("chat_id,chat_details,owner,owner_handle,participant_ids,hash")
                 .contains("participant_ids", [self.user["wickpress"]["id"]])
                 .execute()
             )
@@ -93,7 +93,9 @@ class ChatState(UserState):
                     chat_id=chat["chat_id"],
                     chat_details=chat["chat_details"],
                     owner=chat["owner"],
+                    owner_handle=chat["owner_handle"],
                     participant_ids=chat["participant_ids"],
+                    num_participants=len(chat["participant_ids"]),
                     hash=chat["hash"]
                 )
                 all_chats.append(chat_object)
@@ -113,6 +115,17 @@ class ViewChatState(ChatState):
     user_message: str
     last_submitted_message: int
     loading_single_chat: bool
+
+    @rx.var(cache=False, backend=True)
+    def chat_is_open(self) -> bool:
+        if self.router_data.get("query"):
+            if self.router_data["query"]["chat_id_from_url"]:
+                console.log("Chat is open.")
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def load_single_chat(self) -> EventSpec | None:
         self.loading_single_chat = True
