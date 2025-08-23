@@ -24,6 +24,7 @@ class ChatState(UserState):
     loading_all_chats: bool
     loading_participants: bool
     new_chat_modal_open: bool
+    participant_popup_open: bool
 
     selected_filter: str = "All"
 
@@ -35,21 +36,28 @@ class ChatState(UserState):
 
     chats: list[ChatPartial]
 
-    @rx.var
-    def participant_popup_open(self) -> bool:
-        return True if self.participant else False
-
-    def set_participant(self, participant:str) -> None:
+    def set_participant(self, participant: str) -> None:
         """
         Set participant if user entered, otherwise reset back to default.
         """
         self.participant = participant
         if len(participant) > 0:
             self.query_participant(participant)
+            self.participant_popup_open = True
         else:
-            self.participants = ""
             self.no_participants = ""
             self.loading_participants = False
+            self.participant_popup_open = False
+
+    def set_participants_selected(self, participant: str) -> None:
+        if participant not in self.participants_selected:
+            self.participants_selected.append(participant)
+        self.participant = ""
+        self.participant_popup_open = False
+
+    def remove_participants(self, participant: str) -> None:
+        if participant in self.participants_selected:
+            self.participants_selected.remove(participant)
 
     def query_participant(self, participant: str) -> None:
         """
@@ -66,9 +74,6 @@ class ChatState(UserState):
                 .execute()
             )
             self.participants_available = valid_participants
-            # Prevents UI delay from showing a valid search as invalid for a brief second
-            if not valid_participants:
-                self.no_participants = self.participants
         except:
             console.print_exception()
         finally:

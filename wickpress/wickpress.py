@@ -6,8 +6,20 @@ from .pages import *
 from .states import *
 
 style = {
+    rx.button: {
+        "border_radius": "0.75rem"
+    },
+    rx.input: {
+        "border_radius": "0.75rem"
+    },
     rx.separator: {
         "background_color": "var(--gray-4)",
+    },
+    rx.text_area: {
+        "border_radius": "0.75rem"
+    },
+    rx.text_field: {
+        "border_radius": "0.75rem"
     }
 }
 

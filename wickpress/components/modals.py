@@ -207,32 +207,32 @@ def new_message_modal() -> rx.Component:
     return rx.dialog.root(
         rx.dialog.trigger(
             rx.button(
-                rx.icon("pencil", size=18),
-                size="3",
-                cursor="pointer"
-            )
+                rx.icon("pen", size=16),
+                rx.text("Compose"),
+                cursor="pointer",
+                on_click=ChatState.set_new_chat_modal_open(True)
+            ),
         ),
         rx.dialog.content(
             rx.flex(
                 rx.flex(
                     rx.button(
                         rx.icon("send", size=18),
-                        type="button",
                         cursor="pointer",
                         size="2"
                     ),
-                    rx.text("Compose"),
+                    rx.text("Compose New Chat"),
                     rx.button(
                         rx.text("Cancel"),
                         type="button",
                         cursor="pointer",
                         size="2",
-                        variant="soft"
+                        variant="soft",
+                        on_click=ChatState.set_new_chat_modal_open(False)
                     ),
                     align="center",
                     justify="between",
-                    height="3rem",
-                    padding="2rem 1rem 2rem 1rem",
+                    padding="1rem",
                     position="sticky",
                     top="0",
                     width="100%",
@@ -244,25 +244,31 @@ def new_message_modal() -> rx.Component:
                     # 'To' field embedded in popover trigger
                     rx.flex(
                         message_participant_popover(),
-                    ),
-                    rx.cond(
-                        ChatState
-                    .participants_selected,
-                        rx.flex(
-                            rx.foreach(ChatState
-                        .participants_selected, participants_selected_render),
+                        rx.tooltip(
+                            rx.button(
+                                rx.icon("contact", size=16),
+                                variant="soft",
+                                cursor="pointer"
+                            ),
+                            content="Contacts"
                         ),
+                        gap="1rem"
                     ),
-                    rx.flex(
-                        rx.text_field(
-                            placeholder="Subject",
-                            border="1px solid var(--gray-3)",
-                            box_shadow="none",
-                            width="100%"
+                    # User selected members for group chat
+                    rx.cond(
+                        ChatState.participants_selected,
+                        rx.flex(
+                            rx.foreach(
+                                ChatState.participants_selected,
+                                participants_selected_render
+                            ),
                         ),
                     ),
                     rx.flex(
                         rx.text_area(
+                            placeholder="Message",
+                            rows="6",
+                            size="2",
                             border="1px solid var(--gray-3)",
                             box_shadow="none",
                             width="100%"
@@ -277,14 +283,17 @@ def new_message_modal() -> rx.Component:
                     width="100%"
                 ),
                 flex_direction="column",
-                height="36rem",
             ),
             padding="0 0 0 0",
+            on_interact_outside=ChatState.set_new_chat_modal_open(False)
         ),
+        open=ChatState.new_chat_modal_open,
     )
 
 def participants_selected_render(participant: dict) -> rx.Component:
-    # return rx.badge(f'@{participant.get("handle")}')
+    """
+    Renders small badge of a selected user to allow into chat.
+    """
     return rx.flex(
         rx.text(f"@{participant.get('handle')}", size="2"),
         rx.center(
@@ -296,10 +305,11 @@ def participants_selected_render(participant: dict) -> rx.Component:
             _hover={
                 "bg": "var(--gray-4)"
             },
+            on_click=ChatState.remove_participants(participant)
         ),
         align="center",
         border="1px solid var(--gray-3)",
         border_radius="calc(infinity * 1px)",
         padding="0.25rem 0.5rem",
-        gap="0.5rem"
+        gap="0.5rem",
     )

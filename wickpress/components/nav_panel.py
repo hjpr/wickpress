@@ -114,7 +114,7 @@ def filter_element(filter: str) -> rx.Component:
     return rx.flex(
         rx.badge(
             filter,
-            size="2",
+            size="3",
             user_select="none",
         ),
         cursor="pointer"

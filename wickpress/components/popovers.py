@@ -19,7 +19,9 @@ def message_participant_popover() -> rx.Component:
                     id="participant",
                     placeholder="To",
                     max_length=30,
+                    size="2",
                     border="1px solid var(--gray-3)",
+                    border_radius="0.75rem",
                     box_shadow="none",
                     width="100%",
                     on_key_down=ChatState.set_loading_participants(True).throttle(100),
@@ -36,7 +38,7 @@ def message_participant_popover() -> rx.Component:
                     rx.foreach(ChatState.participants_available, render_participant),
                     rx.center(
                         rx.text(
-                            f'No results for "@{ChatState.no_participants}"',
+                            f'No results for "@{ChatState.participant}"',
                             size="2"
                         )
                     )
@@ -57,5 +59,6 @@ def render_participant(participant: dict) -> rx.Component:
             gap="0.5rem"
         ),
         cursor="pointer",
-        width="100%"
+        width="100%",
+        on_click=ChatState.set_participants_selected(participant)
     )
