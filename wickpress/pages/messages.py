@@ -2,8 +2,7 @@
 from turtle import width
 import reflex as rx
 
-from ..components.chat import slim_message
-from ..components.modals import new_message_modal
+from ..classes.chat import ChatPartial
 from ..components.nav_bars import navbar, navbar_side
 from ..components.protected import login_protected
 from ..states.chat import ChatState
@@ -79,7 +78,16 @@ def nav_panel_messages(
 
                 # Messages header and buttons
                 rx.flex(
-                    new_message_modal(),
+                    rx.button(
+                        rx.icon("pen", size=16),
+                        rx.text("Create"),
+                        cursor="pointer",
+                        on_click=[
+                            ChatState.set_participant(""),
+                            ChatState.set_participants_selected([]),
+                            rx.redirect("/messages/create")
+                        ]
+                    ),
                     rx.button(
                         rx.icon("ellipsis", size=16),
                         variant="soft",
@@ -87,6 +95,7 @@ def nav_panel_messages(
                     ),
                     gap="0.5rem"
                 ),
+                align="center",
                 bg="var(--gray-1)",
                 padding="1rem",
                 border_bottom="1px solid var(--gray-3)",
@@ -236,7 +245,7 @@ def chat_content() -> rx.Component:
                     ChatState.chats,
                     rx.foreach(
                         ChatState.chats,
-                        slim_message
+                        render_message
                     ),
                     rx.flex(
                         rx.center(
@@ -263,4 +272,67 @@ def chat_content() -> rx.Component:
         ),
         flex_direction="column",
         flex_grow="1",
+    )
+
+def render_message(chat: ChatPartial) -> rx.Component:
+    return rx.flex(
+        # Profile picture container
+        rx.flex(
+            rx.flex(
+                rx.cond(
+                    chat.is_group_chat,
+                    rx.icon("users"),
+                    rx.icon("user"),
+                ),
+                align="center",
+                justify="center",
+                height="3rem",
+                width="3rem",
+                border_radius="full",
+            ),
+            flex_direction="column",
+            justify="start",
+        ),
+        # Content container
+        rx.flex(
+            rx.flex(
+                rx.cond(
+                    chat.is_group_chat,
+                    rx.text(
+                        f"Group Chat: {chat.chat_details["name"]}",
+                        text_overflow="ellipsis",
+                        overflow="hidden",
+                        white_space="nowrap",
+                    ),
+                ),
+                rx.flex(
+                    rx.cond(
+                        ~chat.is_group_chat,
+                        rx.text(
+                            f"Private Chat"
+                        ),
+                    ),
+                    rx.text(
+                        f"@{chat.owner_handle}",
+                        size="2"
+                    ),
+                    flex_direction="column"
+                ),
+                justify="center",
+                flex_direction="column",
+                flex_grow="1",
+                width="100%"
+            ),
+            flex_direction="column",
+            gap="1rem",
+            width="100%"
+        ),
+        display="flex",
+        flex_direction="row",
+        justify="center",
+        gap="1rem",
+        border_radius="0.75rem",
+        padding="1rem",
+        cursor="pointer",
+        on_click=rx.redirect(f"/messages/view/{chat['chat_id']}")
     )

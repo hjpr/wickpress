@@ -10,16 +10,21 @@ style = {
         "border_radius": "0.75rem"
     },
     rx.input: {
-        "border_radius": "0.75rem"
+        "border_radius": "0.75rem",
+        "box_shadow": "none"
     },
     rx.separator: {
         "background_color": "var(--gray-4)",
     },
     rx.text_area: {
-        "border_radius": "0.75rem"
+        "border_radius": "0.75rem",
+        "border": "1px solid var(--gray-3)",
+        "box_shadow": "none"
     },
     rx.text_field: {
-        "border_radius": "0.75rem"
+        "border_radius": "0.75rem",
+        "border": "1px solid var(--gray-3)",
+        "box_shadow": "none"
     }
 }
 

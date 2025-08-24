@@ -7,7 +7,9 @@ from copy import deepcopy
 from datetime import datetime, timezone
 from reflex.event import EventSpec
 from rich.console import Console
-from typing import Any, Callable, Generator, Iterable
+from typing import Generator
+
+import wickpress
 
 from ..classes.chat import ChatFull, ChatPartial
 from ..states.page import PageState
@@ -23,7 +25,6 @@ class ChatState(UserState):
 
     loading_all_chats: bool
     loading_participants: bool
-    new_chat_modal_open: bool
     participant_popup_open: bool
 
     selected_filter: str = "All"
@@ -32,7 +33,6 @@ class ChatState(UserState):
     no_participants: str
     participants_available: list[dict[str, str]]
     participants_selected: list[dict[str, str]]
-    content: str
 
     chats: list[ChatPartial]
 
@@ -49,11 +49,14 @@ class ChatState(UserState):
             self.loading_participants = False
             self.participant_popup_open = False
 
-    def set_participants_selected(self, participant: str) -> None:
-        if participant not in self.participants_selected:
-            self.participants_selected.append(participant)
-        self.participant = ""
-        self.participant_popup_open = False
+    def set_participants_selected(self, participant: dict | list) -> None:
+        if isinstance(participant, dict):
+            if participant not in self.participants_selected:
+                self.participants_selected.append(participant)
+            self.participant = ""
+            self.participant_popup_open = False
+        else:
+            self.participants_selected = participant
 
     def remove_participants(self, participant: str) -> None:
         if participant in self.participants_selected:
@@ -85,6 +88,13 @@ class ChatState(UserState):
         Load chats as ChatPartial classes.
         """
         try:
+            owner_chats = (
+                self.query()
+                .table("chats")
+                .select("chat_id,chat_details,owner,owner_handle,participant_ids,hash")
+                .eq("owner", self.user["wickpress"]["id"])
+                .execute()
+            )
             participant_chats = (
                 self.query()
                 .table("chats")
@@ -93,7 +103,7 @@ class ChatState(UserState):
                 .execute()
             )
             all_chats = []
-            for chat in participant_chats:
+            for chat in owner_chats:
                 chat_object = ChatPartial(
                     chat_id=chat["chat_id"],
                     chat_details=chat["chat_details"],
@@ -101,15 +111,143 @@ class ChatState(UserState):
                     owner_handle=chat["owner_handle"],
                     participant_ids=chat["participant_ids"],
                     num_participants=len(chat["participant_ids"]),
-                    hash=chat["hash"]
+                    hash=chat["hash"],
+                    is_group_chat=True if len(chat["participant_ids"]) > 1 else False
                 )
                 all_chats.append(chat_object)
+            for chat in participant_chats:
+                if chat["owner"] != self.user["wickpress"]["id"]:
+                    chat_object = ChatPartial(
+                        chat_id=chat["chat_id"],
+                        chat_details=chat["chat_details"],
+                        owner=chat["owner"],
+                        owner_handle=chat["owner_handle"],
+                        participant_ids=chat["participant_ids"],
+                        num_participants=len(chat["participant_ids"]),
+                        hash=chat["hash"],
+                        is_group_chat=True if len(chat["participant_ids"]) > 1 else False
+                    )
             self.chats = all_chats
 
         except Exception as e: 
             console.print_exception()
         finally:
             self.loading_all_chats = False
+
+
+class CreateChatState(ChatState):
+
+    loading_sending_message: bool
+
+    @rx.var
+    def is_group_chat(self) -> bool:
+        return True if len(self.participants_selected) > 1 else False
+    
+    def send_message(self, form_data: dict) -> Generator:
+        if len(self.participants_selected) == 0:
+            return rx.toast.error("Must add at least one participant to chat.")
+        
+        if len(self.participants_selected) == 1:
+            if not form_data["message"]:
+                return rx.toast.error("Must enter a message to send.")
+            
+            # If sending chat to a user you've already created chat with, send to view message
+            owned_chats = (
+                self.query()
+                .table("chats")
+                .select("owner, participant_ids, chat_id")
+                .eq("owner", self.user["wickpress"]["id"])
+                .execute()
+            )
+            for chat in owned_chats:
+                if self.participants_selected[0]["id"] in chat["participant_ids"]:
+                    yield rx.redirect(f"/messages/view/{chat["chat_id"]}")
+                    yield rx.toast.info("Existing chat with user found.")
+
+            try:
+                new_chat = ChatFull.from_dict({
+                    "chat_id": str(uuid.uuid4()),
+                    "chat_details": {
+                        "name": "",
+                        "description": ""
+                    },
+                    "owner": self.user["wickpress"]["id"],
+                    "owner_handle": self.user["wickpress"]["handle"],
+                    "created_at": str(datetime.now(timezone.utc).isoformat(timespec="seconds")),
+                    "permissions": {
+                        "allow_chat": True,
+                        "allow_interactions": True,
+                        "allow_invites": True
+                    },
+                    "participant_ids": [self.participants_selected[0]["id"]],
+                    "moderator_ids": [],
+                    "messages": [
+                        {
+                            "user_id": self.user["wickpress"]["id"],
+                            "content": form_data["message"],
+                            "timestamp": str(datetime.now(timezone.utc).isoformat(timespec="seconds")),
+                            "interactions": {}
+                        }
+                    ],
+                    "hash": ""
+                })
+                new_chat.hash_self()
+                (
+                    self.query()
+                    .table("chats")
+                    .insert(new_chat.to_dict(), return_="minimal")
+                    .execute()
+                )
+            except Exception as e:
+                console.log(f"Issue creating new chat {str(e)}")
+                console.print_exception()
+
+        if len(self.participants_selected) > 1:
+            if not form_data["group_name"]:
+                return rx.toast.error("Must provide a group name for chat.")
+            if not form_data["message"]:
+                return rx.toast.error("Must enter a message to send.")
+            
+            try:
+                new_chat = ChatFull.from_dict({
+                    "chat_id": str(uuid.uuid4()),
+                    "chat_details": {
+                        "name": form_data.get("group_name", ""),
+                        "description": form_data.get("group_description", "")
+                    },
+                    "owner": self.user["wickpress"]["id"],
+                    "owner_handle": self.user["wickpress"]["handle"],
+                    "created_at": str(datetime.now(timezone.utc).isoformat(timespec="seconds")),
+                    "permissions": {
+                        "allow_chat": True,
+                        "allow_interactions": True,
+                        "allow_invites": True
+                    },
+                    "participant_ids": [participant["id"] for participant in self.participants_selected],
+                    "moderator_ids": [],
+                    "messages": [
+                        {
+                            "user_id": self.user["wickpress"]["id"],
+                            "content": form_data["message"],
+                            "timestamp": str(datetime.now(timezone.utc).isoformat(timespec="seconds")),
+                            "interactions": {}
+                        }
+                    ],
+                    "hash": ""
+                })
+                new_chat.hash_self()
+                (
+                    self.query()
+                    .table("chats")
+                    .insert(new_chat.to_dict(), return_="minimal")
+                    .execute()
+                )
+            except Exception as e:
+                console.log(f"Issue creating new chat {str(e)}")
+                console.print_exception()
+
+
+          
 
 class ViewChatState(ChatState):
 

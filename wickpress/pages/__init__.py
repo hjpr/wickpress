@@ -5,6 +5,7 @@ from .home import home
 from .index import index
 from .library import library
 from .messages import messages
+from .messages_create import messages_create
 from .messages_view import view
 from .signin import signin
 from .signup import signup

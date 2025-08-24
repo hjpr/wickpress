@@ -16,7 +16,6 @@ def message_participant_popover() -> rx.Component:
                         side="right"
                     ),
                     value=ChatState.participant,
-                    id="participant",
                     placeholder="To",
                     max_length=30,
                     size="2",
