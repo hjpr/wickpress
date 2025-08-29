@@ -184,6 +184,7 @@ class CreateChatState(ChatState):
                     "messages": [
                         {
                             "user_id": self.user["wickpress"]["id"],
+                            "user_handle": self.user["wickpress"]["handle"],
                             "content": form_data["message"],
                             "timestamp": str(datetime.now(timezone.utc).isoformat(timespec="seconds")),
                             "interactions": {}
@@ -307,22 +308,12 @@ class ViewChatState(ChatState):
                 .execute()
                 [0]
             )
-            sorted_messages = sorted(
+            chat["messages"] = sorted(
                 chat["messages"], 
                 key=lambda msg: datetime.fromisoformat(msg['timestamp'])
-            )            
+            )          
             # Load object into state
-            chat_obj = ChatFull(
-                chat_id = chat["chat_id"],
-                chat_details = chat["chat_details"],
-                owner = chat["owner"],
-                created_at = chat["created_at"],
-                permissions = chat["permissions"],
-                participant_ids = chat["participant_ids"],
-                moderator_ids = chat["moderator_ids"],
-                messages = sorted_messages,
-                hash=chat["hash"]
-            )
+            chat_obj = ChatFull.from_dict(chat)
             self.current_chat = chat_obj
             # Save object under it's own chat id
             self.chat_cache[chat_obj.chat_id] = chat_obj
